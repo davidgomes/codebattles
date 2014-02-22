@@ -1,0 +1,269 @@
+/* Stylesheet */
+
+@import url("http://fonts.googleapis.com/css?family=Press+Start+2P");
+
+.border-radius(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+* {
+  .border-radius(0px) !important;
+}
+
+body {
+  background: Azure;
+}
+
+.clear {
+  clear: Both;
+}
+
+/* Container */
+#container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* Header */
+.navbar-inner {
+  .border-radius(0px);
+}
+
+header {
+  margin-bottom: 0px !important;
+}
+
+.login-dropdown {
+  min-height: 40px;
+  line-height: 40px;
+
+  a {
+    text-decoration: none !important;
+    color: #999999 !important;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+    &:hover {
+      color: #FFFFFF !important;
+    }
+  }
+}
+
+#login-dropdown-list {
+  left: -20px;
+  top: 35px;
+
+  a {
+    text-decoration: none !important;
+    color: #0088CC !important;
+    text-shadow: none;
+
+    &:hover {
+      color: #333333 !important;
+    }
+  }
+}
+
+/* Game Page */
+#game {
+  .border-radius(0px);
+  background: #D9F6FF;
+  padding: 10px 10px 10px 0px;
+  margin-bottom: 0px;
+  height: 100%;
+
+  h3 {
+    padding-left: 30px;
+    text-align: center;
+    font-size: 40px;
+    margin-top: 0px !important;
+  }
+
+  h4 {
+    padding-left: 140px;
+  }
+}
+
+/* Room List */
+#room-list {
+  list-style: none;
+  width: 80%;
+  margin: 0 auto;
+  padding: 10px 10px;
+  text-align: center;
+
+  li {
+    .border-radius(0px);
+    background-color: AquaMarine;
+    border: 2px solid DeepSkyBlue;
+    padding-bottom: 8px;
+    padding-top: 10px;
+    padding-left: 20px;
+    margin-bottom: 2px;
+
+    strong {
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.30);
+    }
+
+    .user-seq span {
+      padding-right: 5px;
+      border-right: 1px solid black;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    .join-button {
+      margin-right: 10px;
+    }
+  }
+}
+
+#new-room {
+  margin-top: 20px;
+}
+
+/* Game Room */
+#editordiv {
+  margin-bottom: 10px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.problem-statement {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 2%;
+  margin-right: 2%;
+  padding: 10px 15px 0px 15px;
+  .border-radius(10px);
+  background-color: AquaMarine;
+  border: 1px solid DeepSkyBlue;
+
+  strong {
+    font-size: 1.1em;
+    padding-right: 10px;
+  }
+}
+
+.code {
+  margin-left: 2%;
+  float: left;
+  width: 62%;
+
+  textarea {
+    width: 100%;
+  }
+
+  .dropdown {
+    float: left;
+  }
+
+  form {
+    float: right;
+  }
+}
+
+.chat {
+  margin-left: 2%;
+  margin-right: 3%;
+  float: right;
+  width: 20%;
+  font-size: 14px;
+
+  .form-inline {
+    .send-message {
+      width: 98%;
+      .border-radius(0px);
+    }
+  }
+
+  .chat-wrapper {
+    .border-radius(0px);
+    overflow: auto;
+    height: 360px;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid #CCCCCC;
+    padding: 2%;
+    background: White;
+
+    p {
+      margin-bottom: 5px;
+      padding-top: 5px;
+      margin-left: 5px;
+      margin-right: 5px;
+      border-top: 1px solid #CCCCCC;
+
+      .chat-user {
+        font-weight: bold;
+        padding-right: 10px;
+      }
+
+      &:first-child {
+        border: none;
+      }
+    }
+  }
+}
+
+.user-list {
+  float: left;
+  height: 65px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  margin-left: 2%;
+  margin-right: 0.5%;
+
+  .room-user {
+    width: 90px;
+    height: 50px;
+    .border-radius(0px);
+    background-color: AquaMarine;
+    border: 2px solid DeepSkyBlue;
+    margin-left: 0px;
+    margin-bottom: 12px;
+
+    #username {
+      line-height: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: Navy;
+      font-size: 0.7em;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+      margin-bottom: 0px !important;
+    }
+
+    .score {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      line-height: 15px;
+      font-size: 0.8em;
+      text-align: center;
+      color: Black;
+    }
+  }
+}
+
+.exit-button {
+  float: right;
+  margin-right: 3%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.room-title {
+  margin-right: 20px;
+}
+
+.form-horizontal {
+  margin: 0px;
+  width: 90%;
+  text-align: right;
+}

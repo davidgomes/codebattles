@@ -1,0 +1,63 @@
+<template name="renderRoom">
+  {{#with currentRoom}}
+    <h3>{{roomTitle}}</h3>
+
+    <div class="problem-statement">
+      <p>
+        <strong>Problem Statement:</strong>
+        {{statement}}
+      </p>
+    </div>
+
+    <div class="user-list">
+      {{#each roomUsers}}
+        {{> roomUser}}
+      {{/each}}
+    </div>
+
+    <div class="code">
+      {{#constant}}
+        <div id="editordiv">
+
+        </div>
+      {{/constant}}
+
+      <div class="dropdown">
+        <select id="language-selection">
+          <option value="python2">Python 2</option>
+          <option value="python3">Python 3</option>
+        </select>
+      </div>
+
+      <form class="form-inline">
+        {{#if admin}}
+          <input type="button" value="Start Round" class="btn btn-danger start-button"/>
+        {{else}}
+          {{#if roundRunning}}
+            <input type="button" value="Submit" class="btn btn-success submit-button"/>
+          {{/if}}
+        {{/if}}
+      </form>
+    </div>
+
+    {{#isolate}}
+    <div class="chat">
+      <div class="chat-wrapper" id="chat-div">
+        {{#each messageList}}
+          <p><span class="chat-user">{{user}}:</span> {{message}}</p>
+        {{/each}}
+      </div>
+
+      <form class="form-inline">
+        <input name="message" type="text" value="" class="send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
+      </form>
+    </div>
+    {{/isolate}}
+
+    <div class="clear"></div>
+
+    <input type="button" value="Exit Room" class="btn btn-primary exit-button"/>
+
+    <div class="clear"></div>
+  {{/with}}
+</template>

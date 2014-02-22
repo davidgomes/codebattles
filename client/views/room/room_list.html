@@ -1,0 +1,14 @@
+<template name="roomList">
+  <h3>Room List</h3>
+
+  <ul id="room-list">
+    {{#if roomCount}}
+      {{#each rooms}}
+        {{> roomItem}}
+      {{/each}}
+    {{else}}
+      <li>No Open Rooms</li>
+    {{/if}}
+  </ul>
+  {{> roomCreate}}
+</template>
