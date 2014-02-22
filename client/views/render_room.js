@@ -77,8 +77,14 @@ function reloadEditor() {
   editor.setSize($("#editor").parent().width(),
                  $(".chat-wrapper").height() + 4);
 }
+function updateScroll(){
+  var chatdiv = document.getElementById("chat-div");
+  if (chatdiv != undefined)
+    if (chatdiv.scrollHeight - chatdiv.scrollTop >= 350) chatdiv.scrollTop = chatdiv.scrollHeight;
+}
 
 Meteor.setInterval(updateTitle, 1000);
+Meteor.setInterval(updateScroll, 200);
 
 Template.renderRoom.created = function() {
   updateTitle();
