@@ -1,15 +1,25 @@
 <template name="roomUser">
   {{#if self}}
     <div class="room-user room-user-self">
-      <p id="username">{{this}}</p>
-      <p class="score"><strong>Score</strong>: {{score}}</p>
-      <p class="score"><strong>Ranking</strong>: {{rank}}</p>
+      <div class="my-row">
+        <div class="left">
+          <p class="user-name">{{this}}</p>
+          <small>{{rank}}</small>
+        </div>
+
+        <div class="right">{{score}}</div>
+      </div>
     </div>
   {{else}}
     <div class="room-user">
-      <p id="username">{{this}}</p>
-      <p class="score"><strong>Score</strong>: {{score}}</p>
-      <p class="score"><strong>Ranking</strong>: {{rank}}</p>
+      <div class="my-row">
+        <div class="left">
+          <p class="user-name">{{this}}</p>
+          <small>{{rank}}</small>
+        </div>
+
+        <div class="right">{{score}}</div>
+      </div>
     </div>
   {{/if}}
 </template>

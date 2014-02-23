@@ -11,26 +11,27 @@
       </div>
     {{/if}}
 
-    <div class="user-list">
-      {{#each roomUsers}}
-        {{> roomUser}}
-      {{/each}}
-    </div>
-
-    <div class="code">
-      {{#constant}}
-        <div id="editordiv">
-
-        </div>
-      {{/constant}}
-
-      <div class="dropdown">
-        <select id="language-selection">
-          <option value="python2">Python 2</option>
-          <option value="python3">Python 3</option>
-        </select>
+    <div class="row">
+      <div class="span3 user-list" id="room-list">
+        {{#each roomUsers}}
+          {{> roomUser}}
+        {{/each}}
       </div>
-
+      
+      <div class="span6" id="editordiv">
+        {{#constant}}
+        <div id="actual-editor">
+          
+        </div>
+        {{/constant}}
+        
+        <div class="dropdown">
+          <select id="language-selection">
+            <option value="python2">Python 2</option>
+            <option value="python3">Python 3</option>
+          </select>
+      </div>
+      
       <form class="form-inline">
         {{#if admin}}
           <input type="button" value="Start Round" class="btn btn-danger start-button"/>
@@ -41,20 +42,21 @@
         {{/if}}
       </form>
     </div>
-
+      
     {{#isolate}}
-    <div class="chat">
+    <div class="span3" id="chat">
       <div class="chat-wrapper" id="chat-div">
         {{#each messageList}}
           <p><span class="chat-user">{{user}}:</span> {{message}}</p>
-        {{/each}}
-      </div>
+            {{/each}}
+          </div>
 
-      <form class="form-inline">
-        <input name="message" type="text" value="" class="send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
-      </form>
+        <form class="form-inline">
+          <input name="message" type="text" value="" class="send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
+        </form>
+      </div>
+      {{/isolate}}
     </div>
-    {{/isolate}}
 
     <div class="clear"></div>
 

@@ -40,20 +40,19 @@
       <table class="table table-striped" id="room-table">
         <thead>
           <tr>
-            <th>Room Name</th>
-            <th>Host</th>
-            <th>Players</th>
-            <th></th>
+            <th class="room-name">Room Name</th>
+            <th class="host">Host</th>
+            <th class="players">Players</th>
+            <th class="join"></th>
           </tr>
         </thead>
         
         <tbody>
           {{#each rooms}}
-          {{> roomItem}}
+            {{> roomItem}}
           {{/each}}
         </tbody>
       </table>
     {{/if}}
-
   {{/if}}
 </template>

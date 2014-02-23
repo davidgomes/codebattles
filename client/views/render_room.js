@@ -66,7 +66,7 @@ function updateTitle() {
 }
 
 function reloadEditor() {
-  editor = new CodeMirror(document.getElementById('editordiv'), {
+  editor = new CodeMirror(document.getElementById('actual-editor'), {
     lineNumbers: true,
     styleActiveLine: true,
     matchBrackets: true,
@@ -74,13 +74,18 @@ function reloadEditor() {
     theme: 'mbo'
   });
 
-  editor.setSize($("#editor").parent().width(),
+  editor.setSize($("#editor").parent().width() - 100,
                  $(".chat-wrapper").height() + 13);
 }
-function updateScroll(){
+
+function updateScroll() {
   var chatdiv = document.getElementById("chat-div");
-  if (chatdiv != undefined)
-    if (chatdiv.scrollHeight - chatdiv.scrollTop >= 350) chatdiv.scrollTop = chatdiv.scrollHeight;
+
+  if (chatdiv != undefined) {
+    if (chatdiv.scrollHeight - chatdiv.scrollTop >= 350) {
+      chatdiv.scrollTop = chatdiv.scrollHeight;
+    }
+  }
 }
 
 Meteor.setInterval(updateTitle, 1000);

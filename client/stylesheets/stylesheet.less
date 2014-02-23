@@ -22,12 +22,6 @@ body {
   clear: Both;
 }
 
-/* Container */
-#container {
-  width: 90%;
-  margin: 0 auto;
-}
-
 /* Header */
 .navbar-inner {
   .border-radius(0px);
@@ -69,9 +63,6 @@ header {
 
 /* Game Page */
 #game {
-  .border-radius(0px);
-  background: #D9F6FF;
-  padding: 10px 10px 10px 0px;
   margin-bottom: 0px;
   height: 100%;
 
@@ -79,7 +70,8 @@ header {
     padding-left: 30px;
     text-align: center;
     font-size: 40px;
-    margin-top: 0px !important;
+    margin-bottom: 14px;
+    margin-top: 14px;
   }
 
   h4 {
@@ -89,9 +81,6 @@ header {
 /* Room List */
 #room-list {
   list-style: none;
-  width: 80%;
-  margin: 0 auto;
-  padding: 10px 10px;
   text-align: center;
 
   li {
@@ -128,9 +117,7 @@ header {
 
 /* Game Room */
 #editordiv {
-  margin-bottom: 10px;
   font-size: 14px;
-  width: 100%;
 }
 
 .problem-statement {
@@ -150,16 +137,9 @@ header {
 }
 
 .code {
-  margin-left: 2%;
-  float: left;
-  width: 53%;
-
-  textarea {
-    width: 100%;
-  }
-
   .dropdown {
     float: left;
+    margin-top: 10px;
   }
 
   form {
@@ -167,11 +147,7 @@ header {
   }
 }
 
-.chat {
-  margin-left: 2%;
-  margin-right: 3%;
-  float: right;
-  width: 20%;
+#chat {
   font-size: 13px;
 
   .form-inline {
@@ -211,46 +187,34 @@ header {
 }
 
 .user-list {
-  float: left;
-  height: 65px;
-  margin-top: 0px;
-  margin-bottom: 20px;
-  margin-left: 2%;
-  margin-right: 0.5%;
-  
   .room-user {
-    width: 190px;
     height: 50px;
-    .border-radius(0px);
-    background-color: #c3c3c3;
-    border: 2px solid black;
-    margin-left: 0px;
+    background-color: #bfbfbf !important;
+    padding: 10px 10px 10px 10px;
     margin-bottom: 12px;
 
-    #username {
-      line-height: 20px;
-      text-align: center;
-      font-weight: bold;
-      color: black;
-      font-size: 1.0em;
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-      margin-bottom: 0px !important;
+    .left {
+      float: left;
+      width: 50%;
+      text-align: left;
+
+      .user-name {
+        font-weight: bold;
+      }
     }
 
-    .score {
-      margin-top: 0px;
-      margin-bottom: 0px;
-      padding-top: 0px;
-      padding-bottom: 0px;
-      line-height: 15px;
-      font-size: 0.8em;
-      text-align: center;
-      color: black;
+    .right {
+      float: left;
+      width: 50%;
+      text-align: right;
+      font-size: 32px;
+      font-weight: bold;
+      margin-top: 14px;
     }
   }
 
   .room-user-self {
-    background-color: #F00 !important;
+    background-color: #E67E22 !important;
   }
 }
 
@@ -288,11 +252,23 @@ header {
 #room-table {
   margin-left: auto;
   margin-right: auto;
-  width: 70%;
+  width: 60%;
 
   td, th {
     text-align: center;
     vertical-align: middle;
+
+    &.players, &.join {
+      width: 80px;
+    }
+
+    &.join {
+      text-align: right;
+    }
+
+    &.room-name {
+      text-align: left;
+    }
   }
 }
 
