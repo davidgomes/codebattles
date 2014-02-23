@@ -31,5 +31,14 @@
    {"statement": "Write a program that given a set of numbers in one line (separated by spaces), writes the maximum sum of any combination of one, two or more of those numbers that is less than or equal to 9000.",
    "difficulty": "hard",
    "io": [{"input": "3000 1200 8000 4000 12000 4500\n", "output": "8700\n"}]
+  },
+  {"statement": "Write a program that takes a string and reverses it three times.",
+   "difficulty": "easy",
+   "io": [{"input": "sadasrfewfasfweqfrweafaefaewfwasddfa\n", "output": "afddsawfweafeafaewrfqewfsafwefrsadas\n"}]
+  },
+  {"statement": "Write a program that takes a number N in a single line and prints out \"BRIOSA!\" times N. For example, if N=2, it should print out \"BRIOSA! BRIOSA!\"",
+   "difficulty": "easy",
+   "io": ["input": "3\n",
+          "output": "BRIOSA! BRIOSA! BRIOSA!\n"]
   }
 ]
