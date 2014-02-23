@@ -17,45 +17,45 @@
           {{> roomUser}}
         {{/each}}
       </div>
-      
+
       <div class="span6" id="editordiv">
         {{#constant}}
         <div id="actual-editor">
-          
+
         </div>
         {{/constant}}
-        
+
         <div class="dropdown">
           <select id="language-selection">
             <option value="python2">Python 2</option>
             <option value="python3">Python 3</option>
           </select>
-      </div>
-      
-      <form class="form-inline">
-        {{#if admin}}
-          <input type="button" value="Start Round" class="btn btn-danger start-button"/>
-        {{else}}
-          {{#if roundRunning}}
-            <input type="button" value="Submit" class="btn btn-success submit-button"/>
+        </div>
+
+        <form class="form-inline">
+          {{#if admin}}
+            <input type="button" value="Start Round" class="btn btn-danger start-button"/>
+          {{else}}
+            {{#if roundRunning}}
+              <input type="button" value="Submit" class="btn btn-success submit-button"/>
+            {{/if}}
           {{/if}}
-        {{/if}}
-      </form>
+        </form>
     </div>
-      
+
     {{#isolate}}
-    <div class="span3" id="chat">
-      <div class="chat-wrapper" id="chat-div">
-        {{#each messageList}}
-          <p><span class="chat-user">{{user}}:</span> {{message}}</p>
-            {{/each}}
-          </div>
+      <div class="span3" id="chat">
+        <div class="chat-wrapper" id="chat-div">
+          {{#each messageList}}
+            <p><span class="chat-user">{{user}}:</span> {{message}}</p>
+          {{/each}}
+       </div>
 
         <form class="form-inline">
           <input name="message" type="text" value="" class="send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
         </form>
       </div>
-      {{/isolate}}
+    {{/isolate}}
     </div>
 
     <div class="clear"></div>
