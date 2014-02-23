@@ -13,5 +13,9 @@ Template.roomUser.helpers({
       return user.ranking;
     }
     return -1;
+  },
+
+  self: function() {
+    return this.toString() === Meteor.user().username;
   }
 });
