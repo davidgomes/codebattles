@@ -102,7 +102,7 @@ Meteor.methods({
     else {
       Rooms.update(roomId, {
         $inc: {round: 1},
-        $set: {startTime: Date.now() + 10 * 1000}
+        $set: {startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000}
       });
 
       var message = {
@@ -143,7 +143,7 @@ Meteor.methods({
       var message;
 
       if (response === "Accepted") {
-        var score = Math.round(2000 * ((120 + (-Date.now() + room.startTime) / 1000) / 120));
+        var score = Math.round(2000 * ((120 + (-Date.now() + room.countTime) / 1000) / 120));
  
         var message = {
           message: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",

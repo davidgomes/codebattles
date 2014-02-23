@@ -106,9 +106,26 @@ Template.renderRoom.helpers({
 
   roomUsers: function() {
     var room = Rooms.findOne(Session.get('currentRoomId'));
-    var users = room.users;
-    users.push(room.hostName);
-    return users;
+    var usernames = room.users, users = [];
+    usernames.push(room.hostName);
+
+    for (var i = 0; i < usernames.length; i++) {
+      users.push(Meteor.users.findOne({username: usernames[i]}));
+    }
+
+    users.sort(function(u1, u2) {
+      if (u1.score != u2.score) {
+        return u1.score < u2.score;
+      }
+      return u1.ranking < u2.ranking;
+    });
+
+    usernames = [];
+    for (var i = 0; i < users.length; i++) {
+      usernames.push(users[i].username);
+    }
+
+    return usernames;
   },
 
   roundRunning: function() {
