@@ -4,6 +4,7 @@ Template.roomCreate.events({
 
     var roomTitle = $(event.target).find('[name=title]').val();
     var roomDiffulty = $(event.target).find('[id=difficulty-selection]').val();
+
     Meteor.call('room', roomTitle, roomDiffulty, function(error, roomId) {
       if (error) {
         throwError(error.reason);
