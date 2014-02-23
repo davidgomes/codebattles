@@ -89,7 +89,7 @@ function updateScroll() {
 }
 
 Meteor.setInterval(updateTitle, 1000);
-Meteor.setInterval(updateScroll, 200);
+Meteor.setInterval(updateScroll, 150);
 
 Template.renderRoom.created = function() {
   updateTitle();
