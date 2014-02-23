@@ -38,7 +38,7 @@
   },
   {"statement": "Write a program that takes a number N in a single line and prints out \"BRIOSA!\" times N. For example, if N=2, it should print out \"BRIOSA! BRIOSA!\"",
    "difficulty": "easy",
-   "io": ["input": "3\n",
-          "output": "BRIOSA! BRIOSA! BRIOSA!\n"]
+   "io": [{"input": "3\n",
+           "output": "BRIOSA! BRIOSA! BRIOSA!\n"}]
   }
 ]
