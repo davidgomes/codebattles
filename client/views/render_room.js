@@ -129,7 +129,7 @@ Template.renderRoom.helpers({
     for (var i = 0; i < users.length; i++) {
       usernames.push(users[i].username);
     }
-
+    
     return usernames;
   },
 
@@ -218,7 +218,6 @@ Template.renderRoom.events({
 });
 
 Template.renderRoom.rendered = function() {
-  $('.room-user').hide().fadeIn('fast');
   var room = Rooms.findOne(Session.get("currentRoomId"));
 
   if (room && room.status === 0) {

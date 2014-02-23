@@ -20,7 +20,7 @@ Rooms.deny({
 });
 
 Meteor.methods({
-  room: function(roomTitle) {
+  room: function(roomTitle, roomDifficulty) {
     var user = Meteor.user();
     var roomCopy = Rooms.findOne({title: roomTitle});
 
@@ -44,6 +44,7 @@ Meteor.methods({
       round: 0,
       startTime: 0,
       countTime: 0,
+      difficulty: roomDifficulty,
       probNum: -1,
 
       users: []

@@ -1,6 +1,10 @@
 Template.roomItem.helpers({
   userCount: function() {
     return this.users.length + 1;
+  },
+  difficulty: function() {
+    var room = Rooms.findOne({_id: this._id});
+    return room.difficulty;
   }
 });
 

@@ -19,3 +19,7 @@ Template.roomUser.helpers({
     return this.toString() === Meteor.user().username;
   }
 });
+
+Template.roomUser.rendered = function() {
+  $('.room-user').hide().fadeIn('fast');
+};

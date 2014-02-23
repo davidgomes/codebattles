@@ -20,8 +20,15 @@ Meteor.methods({
 
     Messages.insert(message);
 
-    var probId = Math.floor((Math.random() * nproblems) + 1);
-    var problem = problems[probId - 1];
+    var problem;
+    var probId;
+    var difficulty = room.difficulty;
+    while(1){
+      probId = Math.floor((Math.random()*nproblems)+1);
+      problem = problems[probId-1];
+      if (problem.difficulty === difficulty) break;
+    }
+
     Rooms.update(roomId,{$set: {statement: problem.statement}});
     Rooms.update(roomId,{$set: {probNum: probId}});
 
