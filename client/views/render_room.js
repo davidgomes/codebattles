@@ -192,6 +192,12 @@ Template.renderRoom.events({
 });
 
 Template.renderRoom.rendered = function() {
+  var room = Rooms.findOne(Session.get("currentRoomId"));
+
+  if (room && room.status === 0) {
+    setProblem("");
+  }
+
   if (Session.get("currentRoomId") && !Rooms.findOne({_id: Session.get("currentRoomId")})) {
     alert("The host closed the room");
     Session.set("currentRoomId", 0);
