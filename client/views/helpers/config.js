@@ -2,6 +2,7 @@ Accounts.ui.config({
   passwordSignupFields: 'USERNAME_ONLY'
 });
 
+/*
  Accounts.loginServiceConfiguration.insert({
   service: "github",
   clientId: "25ec16dfb8fb5c9c4a4c",
@@ -16,3 +17,4 @@ Meteor.loginWithGithub({
     alert(err.reason || 'Unknown error');
   }
 });
+*/
