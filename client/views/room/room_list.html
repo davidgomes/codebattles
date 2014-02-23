@@ -1,14 +1,49 @@
 <template name="roomList">
-  <h3>Room List</h3>
+  <div id="introtextdiv">
+    <p>
+      CodeBattles is an online platform for solving simple programming
+      exercises in a real-time competitive environment. The idea is to
+      have people engage in friendly contests agains friends or unknown to
+      have fun and improve their programming skills.
+    </p>
 
-  <ul id="room-list">
-    {{#if roomCount}}
-      {{#each rooms}}
-        {{> roomItem}}
-      {{/each}}
-    {{else}}
-      <li>No Open Rooms</li>
-    {{/if}}
-  </ul>
-  {{> roomCreate}}
+    <h4>More about CodeBattles.</h4>
+
+    <p>
+      CodeBattles was made at <a href="http://shiftappens.com">Shift
+      APPens</a>, a hackathon organized in Portugal where 50
+      participants took part to make an app in 48 hours. CodeBattles
+      was made by David Gomes, Pedro Paredes and André Baptista.
+    </p>
+
+    <h4>How does it work?</h4>
+
+    <p>
+      The idea is that you join rooms to play games of 5 rounds
+      (around 2 minutes each) and are then ranked on how fast you can
+      solve the problems. For now, you can use both Python 2 and 3,
+      but we intend to add support for other languages in the future.
+    </p>
+
+    <p>
+      All you have to do to start playing is sign up for an account
+      and you can then pick any room to start playing!
+    </p>
+  </div>
+
+  {{#if isLoggedIn}}
+    <h3 class="room-list-header">Room List</h3>
+
+    <ul id="room-list">
+      {{#if roomCount}}
+        {{#each rooms}}
+          {{> roomItem}}
+        {{/each}}
+      {{else}}
+        <li>No Open Rooms</li>
+      {{/if}}
+    </ul>
+
+    {{> roomCreate}}
+  {{/if}}
 </template>
