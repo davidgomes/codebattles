@@ -31,7 +31,7 @@ Template.renderSignup.events({
     event.preventDefault();
     sign();
   },
-  'submit form': function(event) {
+  'submit #signUpModal form': function(event) {
     event.preventDefault();
     sign();
   }
