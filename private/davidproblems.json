@@ -18,8 +18,8 @@
 
   {"statement": "Write a program that given a list of space-separated integers in a single line, prints out a line with the same numbers, but sorted.",
    "difficulty": "easy",
-   "io": [{"input": "1 2 2 4 223 312 312 432 21122 2123123\n",
-           "output": "4 432 312 2123123 21122 2 223 312 2 1\n"
+   "io": [{"input": "4 432 312 2123123 21122 2 223 312 2 1\n",
+           "output": "1 2 2 4 223 312 312 432 21122 2123123\n"
           }]
    }
 ]
