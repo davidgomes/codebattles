@@ -36,6 +36,10 @@ Meteor.methods({
       throw new Meteor.Error(302,  "There already is a room with that title");
     }
 
+    Meteor.users.update(user._id, {
+      $set: {score: 0}
+    });
+
     var room = {
       title: roomTitle,
       hostId: user._id,
@@ -82,6 +86,10 @@ Meteor.methods({
     if (room.status !== 0) {
       throw new Meteor.Error(303,  "Game Started");
     }
+
+    Meteor.users.update(user._id, {
+      $set: {score: 0}
+    });
 
     Rooms.update({
       _id: room._id
