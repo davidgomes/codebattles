@@ -31,23 +31,78 @@
    "io": [{"input": "12412332322224566246808264712\n", "output": "66246808264\n"}]
    },
   {"id": 6,
-   "statement": "Write a program that takes a set of two or more points (each point a pair of integer coordinates x and y) one per line (terminanting with the point 0 0) and returns the index (given by the order of input) of the point which is furthest away from the first one.",
-   "difficulty": "medium",
-   "io": [{"input": "1 1\n1 2\n3 3\n-3 -3\n8 8\n9 0\n12 22\n2 9\n22 3\n-1 -1\n1 -1\n1 1\n3 1\n", "output": "6\n"}]
-   },
-  {"id": 7,
    "statement": "Write a program that takes a positive integer and prints its factorial modulus 100000",
    "difficulty": "medium",
    "io": [{"input": "24\n", "output": "60000\n"}]
    },
-   {"id": 8,
+   {"id": 7,
    "statement": "Write a program that prints every perfect square between 13 and 730. Print one number per line.",
    "difficulty": "easy",
    "io": [{"input": "", "output": "16\n25\n36\n49\n64\n81\n100\n121\n144\n169\n196\n225\n256\n289\n324\n361\n400\n441\n484\n529\n576\n625\n676\n729\n"}]
    },
-   {"id": 9,
+   {"id": 8,
    "statement": "Write a program that receives by input the number of nodes of a binary tree and prints its number of edges.",
    "difficulty": "easy",
    "io": [{"input": "699", "output": "698\n"}]
-   }
+   },
+   {"id": 9,
+   "statement": "Write a program that takes a set of words in a single line and prints out all words that start with a capital letter in distinct lines.",
+   "difficulty": "easy",
+   "io": [{"input": "Pedro Paredes nao E O Maior coxo Do Mundo", "output": "Pedro\nParedes\nE\nO\nMaior\nDo\nMundo"}]
+   },
+   {"id": 10,
+   "statement": "Write a program that takes a string (with no spaces and all lowercase) and returns the frequency of the most frequent letter in the string.",
+   "difficulty": "easy",
+   "io": [{"input": "asaaaaabcdefcadsdojnasjhaa\n", "output": "10\n"}]
+   },
+   {"id": 11,
+   "statement": "Write a program that given any number reverses it and adds 1 to it (i.e. 123 -> 321 -> 322)",
+   "difficulty": "easy",
+   "io": [{"input": "2312323122343\n", "output": "3432213232133\n"}]
+   },
+   {"id": 12,
+   "statement": "Write a program that given two strings (one per line) prints \"yay\" if they have the same number of vowels in the same position in the string, or \"nay\" otherwise (with no quotes)",
+   "difficulty": "easy",
+   "io": [{"input": "aabbeeddruu\naarreesspuurgthjkh\n", "output": "yay\n"}]
+   },
+  {"id": 13,
+   "statement": "Write a program that given a string prints its every other character starting with the first one.",
+   "difficulty": "easy",
+   "io": [{"input": "aabbccddeerrggasasasa\n", "output": "abcdergaaaa\n"}]
+   },
+  {"id": 14,
+   "statement": "Write a program that takes three integers (one per line) and prints \"yay\" if either the second or the third number differs by three units from the first, but not both and the first is the smallest of the three. Print \"nay\" otherwise (no quotes)",
+   "difficulty": "easy",
+   "io": [{"input": "2 5 5\n", "output": "nay\n"}]
+   },
+  {"id": 15,
+   "statement": "A palindromic number is a number equal to its reverse. Write a problem that takes a palindromic number and returns the smallest palindromic number larger than the original number whose sum is yet another palindromic number.",
+   "difficulty": "easy",
+   "io": [{"input": "12121\n", "output": "12221\n"}]
+   },
+  {"id": 16,
+   "statement": "Imagine a set of N cities connected by roads in a circular fashion (1 -> 2 -> 3 -> ... -> n -> 1). Given in a single line a set of space separated numbers representing the length of each road starting from (1 -> 2) then (2 -> 3) and so on in this order and then the index of two cities separated by spaces in a second line print the value of the closest distance between them using only the given roads",
+   "difficulty": "medium",
+   "io": [{"input": "5 4 2 7 4 3 2\n3 6", "output": "13\n"}]
+   },
+  {"id": 17,
+   "statement": "Write a program that given one positive integers prints all even positive integers smaller than it in one line (separated by spaces) all odd positive integers smaller than it in another one.",
+   "difficulty": "easy",
+   "io": [{"input": "15\n", "output": "2 4 6 8 10 12 14\n1 3 5 7 9 11 13\n"}]
+   },
+  {"id": 18,
+   "statement": "A cube pyramid is a pyramid made of cubes of the same size. At the top layer there is a single cube, at the second layer there are 4, then 20... Write a program that given the height of a pyramid in number of cubes, prints its total number of cubes.",
+   "difficulty": "medium",
+   "io": [{"input": "112\n", "output": "1848224\n"}]
+   },
+  {"id": 19,
+   "statement": "Write a program that given an integer N prints the Nth tribonacci number (tribonaccu number: a_n = a(n-1) + a(n-2) + a(n-3), just like fibonacci but with summing three previous factors). The sequence starts in index 1 and consider a(1) = 0, a(2) = 0 and a(3) = 1",
+   "difficulty": "medium",
+   "io": [{"input": "24\n", "output": "223317\n"}]
+  },
+  {"id": 20,
+   "statement": "Write a program that given a set of numbers in one line (separated by spaces), writes the maximum sum of any combination of one, two or more of those numbers that is less than or equal to 9000.",
+   "difficulty": "medium",
+   "io": [{"input": "3000 1200 8000 4000 12000 4500\n", "output": "8700\n"}]
+  } 
 ]
