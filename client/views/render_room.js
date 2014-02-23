@@ -218,6 +218,7 @@ Template.renderRoom.events({
 });
 
 Template.renderRoom.rendered = function() {
+  $('.room-user').hide().fadeIn('fast');
   var room = Rooms.findOne(Session.get("currentRoomId"));
 
   if (room && room.status === 0) {
