@@ -1,0 +1,6 @@
+[
+  {"statement": "Write a program that gets a line of space-separated integers and outputs the most common number.",
+   "difficulty": "easy",
+   "io": [{"input": "1 4 1923 231 312 21312 321 2 3 4 4 5 123 2\n", "output": "4\n"}]
+  }
+]

@@ -16,6 +16,8 @@
         {{#each roomUsers}}
           {{> roomUser}}
         {{/each}}
+
+        <input type="button" value="Exit Room" class="btn btn-primary exit-button"/>
       </div>
 
       <div class="span6" id="editordiv">
@@ -23,15 +25,15 @@
           <div id="actual-editor">
           </div>
         {{/constant}}
-
-        <div class="dropdown">
+          
+        <div class="dropdown pull-left">
           <select id="language-selection">
             <option value="python2">Python 2</option>
             <option value="python3">Python 3</option>
           </select>
         </div>
 
-        <form class="form-inline">
+        <form class="form-inline pull-right">
           {{#if admin}}
             <input type="button" value="Start Round" class="btn btn-danger start-button"/>
           {{else}}
@@ -56,11 +58,5 @@
       </div>
     {{/isolate}}
     </div>
-
-    <div class="clear"></div>
-
-    <input type="button" value="Exit Room" class="btn btn-primary exit-button"/>
-
-    <div class="clear"></div>
   {{/with}}
 </template>
