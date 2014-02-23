@@ -32,36 +32,26 @@
   </div>
 
   {{#if isLoggedIn}}
-    <h3 class="room-list-header">Room List</h3>
-
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Join</th>
-          <th>Name</th>
-          <th>Host</th>
-          <th>Players</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {{#each rooms}}
-          {{> roomItem}}
-        {{/each}}
-      </tbody>
-
-    </table>
-
-    <ul id="room-list">
-      {{#if roomCount}}
-        {{#each rooms}}
-          {{> roomItem}}
-        {{/each}}
-      {{else}}
-        <li>No Open Rooms</li>
-      {{/if}}
-    </ul>
-
     {{> roomCreate}}
+
+    {{#if roomCount}}
+      <table class="table table-striped" id="room-table">
+        <thead>
+          <tr>
+            <th>Room Name</th>
+            <th>Host</th>
+            <th>Players</th>
+            <th></th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          {{#each rooms}}
+          {{> roomItem}}
+          {{/each}}
+        </tbody>
+      </table>
+    {{/if}}
+
   {{/if}}
 </template>
