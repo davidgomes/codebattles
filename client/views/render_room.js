@@ -48,6 +48,7 @@ function updateTitle() {
     }
 
     if (timeLeft > 0) {
+      setProblem("");
       tmptitle += " | " + (timeLeft).toString();
     } else if (timeLeft + 2 * 60 > 0) {
       tmptitle += " | " + (timeLeft + 2 * 60).toString();
