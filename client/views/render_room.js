@@ -145,6 +145,10 @@ Template.renderRoom.helpers({
 
   statement: function() {
     return problem();
+  },
+
+  problemFull: function() {
+    return problem() !== "";
   }
 });
 

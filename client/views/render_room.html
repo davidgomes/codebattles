@@ -2,12 +2,14 @@
   {{#with currentRoom}}
     <h3>{{roomTitle}}</h3>
 
-    <div class="problem-statement">
-      <p>
-        <strong>Problem Statement:</strong>
-        {{statement}}
-      </p>
-    </div>
+    {{#if problemFull}}
+      <div class="problem-statement">
+        <p>
+          <strong>Problem Statement:</strong>
+          {{statement}}
+        </p>
+      </div>
+    {{/if}}
 
     <div class="user-list">
       {{#each roomUsers}}
