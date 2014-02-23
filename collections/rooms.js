@@ -126,7 +126,7 @@ Meteor.methods({
 
     Rooms.update(room._id, {
       $inc: {status: 1, round: 1},
-      $set: {startTime: Date.now() + 10 * 1000}
+      $set: {startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000}
     });
 
     var message = {
