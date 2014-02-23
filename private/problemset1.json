@@ -39,5 +39,15 @@
    "statement": "Write a program that takes a positive integer and prints its factorial modulus 100000",
    "difficulty": "medium",
    "io": [{"input": "24\n", "output": "60000\n"}]
+   },
+   {"id": 8,
+   "statement": "Write a program that prints every perfect square between 13 and 730. Print one number per line.",
+   "difficulty": "easy",
+   "io": [{"input": "", "output": "16\n25\n36\n49\n64\n81\n100\n121\n144\n169\n196\n225\n256\n289\n324\n361\n400\n441\n484\n529\n576\n625\n676\n729\n"}]
+   },
+   {"id": 9,
+   "statement": "Write a program that receives by input the number of nodes of a binary tree and prints its number of edges.",
+   "difficulty": "easy",
+   "io": [{"input": "699", "output": "698\n"}]
    }
 ]
