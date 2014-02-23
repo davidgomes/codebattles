@@ -75,7 +75,7 @@ function reloadEditor() {
   });
 
   editor.setSize($("#editor").parent().width(),
-                 $(".chat-wrapper").height() + 4);
+                 $(".chat-wrapper").height() + 13);
 }
 function updateScroll(){
   var chatdiv = document.getElementById("chat-div");

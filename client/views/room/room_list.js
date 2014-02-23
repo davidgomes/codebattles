@@ -8,6 +8,6 @@ Template.roomList.helpers({
   },
 
   isLoggedIn: function() {
-    return Meteor.users.find().count() > 0;
+    return !! Meteor.user();
   }
 });
