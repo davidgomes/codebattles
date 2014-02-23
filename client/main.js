@@ -1,3 +1,7 @@
+Template.main.loggedIn = function() {
+  return !! Meteor.user();
+};
+
 rooms = Meteor.subscribe('rooms');
 
 Meteor.autosubscribe(function () {

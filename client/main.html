@@ -4,9 +4,18 @@
 
 <body>
   {{> header}}
-  <div class="container">
-    <div id="game">
-      {{> mainRoom}}
-    </div>
-  </div>
+
+  {{> main}}
 </body>
+
+<template name="main">
+  {{#if loggedIn}}
+    <div class="container">
+      <div id="game">
+        {{> mainRoom}}
+      </div>
+    </div>
+  {{else}}
+    {{> renderSignup}}
+  {{/if}}
+</template>

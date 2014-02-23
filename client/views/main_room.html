@@ -2,10 +2,6 @@
   {{#if inRoom}}
     {{> renderRoom}}
   {{else}}
-    {{#if loggedIn}}
-      {{> renderMain}}
-    {{else}}
-      {{> renderSignup}}
-    {{/if}}
+    {{> renderMain}}
   {{/if}}
 </template>
