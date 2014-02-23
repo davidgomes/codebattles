@@ -43,6 +43,7 @@ Meteor.methods({
       status: 0,
       round: 0,
       startTime: 0,
+      countTime: 0,
       probNum: -1,
 
       users: []
