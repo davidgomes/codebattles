@@ -75,11 +75,9 @@ Meteor.startup(function() { });
 Meteor.methods({
   runCode: function(code,language,userId,probNum) {
     var future = new Future();
-
     Evaluator.run(code, language, userId, probNum, function(response) {
       future.return(response);
     });
-
     return future.wait();
   }
 });

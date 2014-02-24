@@ -146,6 +146,20 @@ Meteor.methods({
       throw new Meteor.Error(401, "Round hasn't started yet...");
     }
 
+    var execute = false;
+    Meteor.call("checkCode", code, language, function(error, response){
+      execute = response;
+    });
+    if (!execute) {
+      message = {
+        message: "User " + user.username  + " submited the problem for 0 points. Runtime Error! ",
+        roomId: roomId,
+        user: "System"
+      };
+      Messages.insert(message);
+      return;
+    }
+
     Meteor.call('runCode', code, language, userId, room.probNum, function(error, response) {
       var message;
 

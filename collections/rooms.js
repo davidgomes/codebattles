@@ -40,6 +40,10 @@ Meteor.methods({
       $set: {score: 0}
     });
 
+    //prevents injection
+    var allowedLevels = ["easy","medium","hard"];
+    if (allowedLevels.indexOf(roomDifficulty) === -1) roomDifficulty = "easy";
+
     var room = {
       title: roomTitle,
       hostId: user._id,
