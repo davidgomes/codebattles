@@ -3,12 +3,14 @@
     <h3>{{roomTitle}}</h3>
 
     {{#if problemFull}}
+      {{#constant}}
       <div class="problem-statement">
         <p>
           <strong>Problem Statement:</strong>
           {{statement}}
         </p>
       </div>
+      {{/constant}}
     {{/if}}
 
     <div class="row">
