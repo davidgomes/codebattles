@@ -43,9 +43,9 @@
    "io": [{"input": "sadasrfewfasfweqfrweafaefaewfwasddfa\n", "output": "afddsawfweafeafaewrfqewfsafwefrsadas\n"}]
   },
   
-  {"statement": "Write a program that takes a number N in a single line and prints out \"BRIOSA!\" times N. For example, if N=2, it should print out \"BRIOSA! BRIOSA!\"",
+  {"statement": "Write a program that takes a number N in a single line and prints out \"BRIOSA!\" times N. For example, if N=2, it should print out \"BRIOSA! BRIOSA!\", each shout in its line.",
    "difficulty": "easy",
    "io": [{"input": "3\n",
-           "output": "BRIOSA! BRIOSA! BRIOSA!\n"}]
+           "output": "BRIOSA!\nBRIOSA!\nBRIOSA!\n"}]
   }
 ]

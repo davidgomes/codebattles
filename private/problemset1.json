@@ -47,7 +47,7 @@
   
   {"statement": "Write a program that takes a set of words in a single line and prints out all words that start with a capital letter in distinct lines.",
    "difficulty": "easy",
-   "io": [{"input": "Pedro Paredes nao E O Maior coxo Do Mundo", "output": "Pedro\nParedes\nE\nO\nMaior\nDo\nMundo"}]
+   "io": [{"input": "Pedro Paredes nao E O Maior coxo Do Mundo", "output": "Pedro\nParedes\nE\nO\nMaior\nDo\nMundo\n"}]
   },
   
   {"statement": "Write a program that takes a string (with no spaces and all lowercase) and returns the frequency of the most frequent letter in the string.",
