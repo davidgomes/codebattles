@@ -5,82 +5,101 @@
            "output": "2\n4\n6\n8\n10\n12\n14\n16\n18\n20\n22\n24\n26\n28\n30\n32\n34\n36\n38\n40\n42\n44\n46\n48\n50\n52\n54\n56\n58\n60\n62\n64\n66\n68\n70\n72\n74\n76\n78\n80\n82\n84\n86\n88\n90\n92\n94\n96\n98\n100\n"
           }]
   },
+  
   {"statement": "Write a program that prints the english alphabet. Eg: 'abc...'",
    "difficulty": "easy",
    "io": [{"input": "",
            "output": "abcdefghijklmnopqrstuvwxyz\n"
           }]
   },
+  
   {"statement": "Write a program that prints every prime number between 2 and 1000. Print one integer per line.",
    "difficulty": "medium",
    "io": [{"input": "",
            "output": "2\n3\n5\n7\n11\n13\n17\n19\n23\n29\n31\n37\n41\n43\n47\n53\n59\n61\n67\n71\n73\n79\n83\n89\n97\n101\n103\n107\n109\n113\n127\n131\n137\n139\n149\n151\n157\n163\n167\n173\n179\n181\n191\n193\n197\n199\n211\n223\n227\n229\n233\n239\n241\n251\n257\n263\n269\n271\n277\n281\n283\n293\n307\n311\n313\n317\n331\n337\n347\n349\n353\n359\n367\n373\n379\n383\n389\n397\n401\n409\n419\n421\n431\n433\n439\n443\n449\n457\n461\n463\n467\n479\n487\n491\n499\n503\n509\n521\n523\n541\n547\n557\n563\n569\n571\n577\n587\n593\n599\n601\n607\n613\n617\n619\n631\n641\n643\n647\n653\n659\n661\n673\n677\n683\n691\n701\n709\n719\n727\n733\n739\n743\n751\n757\n761\n769\n773\n787\n797\n809\n811\n821\n823\n827\n829\n839\n853\n857\n859\n863\n877\n881\n883\n887\n907\n911\n919\n929\n937\n941\n947\n953\n967\n971\n977\n983\n991\n997\n"
           }]
   },
+  
   {"statement": "Write a program that takes a string and reverses it three times.",
    "difficulty": "easy",
    "io": [{"input": "sadasrfewfasfweqfrweafaefaewfwasddfa\n", "output": "afddsawfweafeafaewrfqewfsafwefrsadas\n"}]
   },
+  
   {"statement": "Write a program that takes a sequence of numbers separated by spaces and prints the longest contiguous subsequence of even numbers.",
    "difficulty": "medium",
    "io": [{"input": "12412332322224566246808264712\n", "output": "66246808264\n"}]
   },
+  
   {"statement": "Write a program that takes a positive integer and prints its factorial modulus 100000",
    "difficulty": "medium",
    "io": [{"input": "24\n", "output": "60000\n"}]
   },
+  
   {"statement": "Write a program that prints every perfect square between 13 and 730. Print one number per line.",
    "difficulty": "easy",
    "io": [{"input": "", "output": "16\n25\n36\n49\n64\n81\n100\n121\n144\n169\n196\n225\n256\n289\n324\n361\n400\n441\n484\n529\n576\n625\n676\n729\n"}]
   },
+  
   {"statement": "Write a program that receives by input the number of nodes of a binary tree and prints its number of edges.",
    "difficulty": "easy",
    "io": [{"input": "699", "output": "698\n"}]
   },
+  
   {"statement": "Write a program that takes a set of words in a single line and prints out all words that start with a capital letter in distinct lines.",
    "difficulty": "easy",
    "io": [{"input": "Pedro Paredes nao E O Maior coxo Do Mundo", "output": "Pedro\nParedes\nE\nO\nMaior\nDo\nMundo"}]
   },
+  
   {"statement": "Write a program that takes a string (with no spaces and all lowercase) and returns the frequency of the most frequent letter in the string.",
    "difficulty": "medium",
    "io": [{"input": "asaaaaabcdefcadsdojnasjhaa\n", "output": "10\n"}]
   },
+  
   {"statement": "Write a program that given any number reverses it and adds 1 to it (i.e. 123 -> 321 -> 322)",
    "difficulty": "medium",
    "io": [{"input": "2312323122343\n", "output": "3432213232133\n"}]
   },
+  
   {"statement": "Write a program that given two strings (one per line) prints \"yay\" if they have the same number of vowels in the same position in the string, or \"nay\" otherwise (with no quotes)",
    "difficulty": "medium",
    "io": [{"input": "aabbeeddruu\naarreesspuurgthjkh\n", "output": "yay\n"}]
   },
+  
   {"statement": "Write a program that given a string prints its every other character starting with the first one.",
    "difficulty": "easy",
    "io": [{"input": "aabbccddeerrggasasasa\n", "output": "abcdergaaaa\n"}]
   },
+  
   {"statement": "Write a program that takes three integers (one per line) and prints \"yay\" if either the second or the third number differs by three units from the first, but not both and the first is the smallest of the three. Print \"nay\" otherwise (no quotes)",
    "difficulty": "easy",
    "io": [{"input": "2 5 5\n", "output": "nay\n"}]
   },
+  
   {"statement": "A palindromic number is a number equal to its reverse. Write a problem that takes a palindromic number and returns the smallest palindromic number larger than the original number whose sum is yet another palindromic number.",
    "difficulty": "medium",
    "io": [{"input": "12121\n", "output": "12221\n"}]
   },
+  
   {"statement": "Imagine a set of N cities connected by roads in a circular fashion (1 -> 2 -> 3 -> ... -> n -> 1). Given in a single line a set of space separated numbers representing the length of each road starting from (1 -> 2) then (2 -> 3) and so on in this order and then the index of two cities separated by spaces in a second line print the value of the closest distance between them using only the given roads",
    "difficulty": "hard",
    "io": [{"input": "5 4 2 7 4 3 2\n3 6", "output": "13\n"}]
   },
+  
   {"statement": "Write a program that given one positive integers prints all even positive integers smaller than it in one line (separated by spaces) all odd positive integers smaller than it in another one.",
    "difficulty": "easy",
    "io": [{"input": "15\n", "output": "2 4 6 8 10 12 14\n1 3 5 7 9 11 13\n"}]
   },
+  
   {"statement": "A cube pyramid is a pyramid made of cubes of the same size. At the top layer there is a single cube, at the second layer there are 4, then 20... Write a program that given the height of a pyramid in number of cubes, prints its total number of cubes.",
    "difficulty": "hard",
    "io": [{"input": "112\n", "output": "1848224\n"}]
   },
+  
   {"statement": "Write a program that given an integer N prints the Nth tribonacci number (tribonaccu number: a_n = a(n-1) + a(n-2) + a(n-3), just like fibonacci but with summing three previous factors). The sequence starts in index 1 and consider a(1) = 0, a(2) = 0 and a(3) = 1",
    "difficulty": "hard",
    "io": [{"input": "24\n", "output": "223317\n"}]
   },
+  
   {"statement": "Write a program that given a set of numbers in one line (separated by spaces), writes the maximum sum of any combination of one, two or more of those numbers that is less than or equal to 9000.",
    "difficulty": "hard",
    "io": [{"input": "3000 1200 8000 4000 12000 4500\n", "output": "8700\n"}]

@@ -1,4 +1,5 @@
 problems = JSON.parse(Assets.getText("problemset1.json"));
+problems = problems.concat(JSON.parse(Assets.getText("davidproblems.json")));
 nproblems = problems.length;
 
 for (var i = 0; i < nproblems; i++) {
