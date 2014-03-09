@@ -56,13 +56,18 @@ Meteor.methods({
 
     var roomId = Rooms.insert(room);
 
-    var message = {
+    Meteor.users.update(
+      user._id,
+      {$set: {roomId: roomId}}
+    );
+
+    /*    var message = {
       message: "User " + user.username + " has entered the room.",
       roomId: roomId,
       user: "System"
     };
 
-    Messages.insert(message);
+    Messages.insert(message);*/
 
     return roomId;
   },
@@ -97,13 +102,26 @@ Meteor.methods({
       $addToSet: {users: user.username}
     });
 
-    var message = {
+    /*    var message = {
       message: "User " + user.username + " has entered the room.",
       roomId: room._id,
       user: "System"
     };
 
-    Messages.insert(message);
+    Messages.insert(message);*/
+
+    Meteor.users.update(
+      user._id,
+      {$set: {roomId: room._id}}
+    );
+    console.log("Changing");
+
+    var message = {
+      text: "User " + user.username + " has entered the room.",
+      user: "System"
+    };
+
+    RoomStream.emit(room._id + ':message', message);
 
     return room._id;
   },
@@ -175,31 +193,116 @@ Meteor.methods({
     var user = Meteor.user();
     
     if (!room) {
-      return;
+      return {closed: false, _id: 0};
     }
 
     if (!user) {
       throw new Meteor.Error(401, "You should be logged in to exit a room");
     }
 
-    if (room.hostName == user.username) {
+    var host = room.hostName;
+
+    if (host === user.username) {
+      Meteor.users.update(
+        user._id,
+        {$set: {roomId: 0}}
+      );
+
+      var id = room._id;
       Rooms.remove(room._id);
-      return;
+      return {closed: true, _id: id};
     }
 
     if (!_.contains(room.users, user.username)) {
       throw new Meteor.Error(301, "You should be in the room to exit the room");
     }
 
+    /*
     var message = {
       message: "User " + user.username + " exited.",
       roomId: room._id,
       user: "System"
     };
 
-    Messages.insert(message);
+    Messages.insert(message);*/
+
+    Meteor.users.update(
+      user._id,
+      {$set: {roomId: 0}}
+    );
+
+    var message = {
+      text: "User " + user.username + " has exited the room.",
+      user: "System"
+    };
+
+    RoomStream.emit(room._id + ':message', message);
 
     Rooms.update({title: roomTitle}, {$pull : {users: user.username}});
-    LoggedUsers.remove({username: user.username});
+    //    LoggedUsers.remove({username: user.username});
+
+    return {closed: false, _id: 0};
+  },
+
+  exitFromServer: function(roomId, userId){
+    var room = Rooms.findOne(roomId);
+    var user = Meteor.users.findOne(userId);
+
+    if (!room || !user) {
+      return {closed: false, _id: 0};
+    }
+
+    if (room.hostName === user.username) {
+      Meteor.users.update(
+        userId,
+        {$set: {roomId: 0}}
+      );
+
+      Rooms.remove(roomId);
+      return {closed: true, _id: roomId};
+    }
+
+    if (!_.contains(room.users, user.username)) {
+      return {closed: false, _id: 0};
+    }
+
+    /*
+    var message = {
+      message: "User " + user.username + " exited.",
+      roomId: room._id,
+      user: "System"
+    };
+
+    Messages.insert(message);*/
+
+    Meteor.users.update(
+      userId,
+      {$set: {roomId: 0}}
+    );
+
+    var message = {
+      text: "User " + user.username + " has exited the room.",
+      user: "System"
+    };
+
+    RoomStream.emit(roomId + ':message', message);
+
+    Rooms.update({title: room.title}, {$pull : {users: user.username}});
+    //    LoggedUsers.remove({username: user.username});
+
+    return {closed: false, _id: 0};
+  },
+
+  exitRemoved: function(){
+    var user = Meteor.user();
+
+    if (!user) {
+      throw new Meteor.Error(401, "You should be logged in to exit a room");
+    }
+
+    Meteor.users.update(
+      user._id,
+      {$set: {roomId: 0}}
+    );
   }
 });

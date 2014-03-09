@@ -1,51 +1,21 @@
-Meteor.setInterval(function(){
-  var time = new Date().getTime() - 6000;
-  var expiredUsers = LoggedUsers.find(
-    {timestamp: {$lt: time}}
-  ).fetch();
-
-  for (var i = 0; i < expiredUsers.length; i++) {
-    console.log(expiredUsers[i].username);
-
-    room = Rooms.findOne({users: {$in: [expiredUsers[i].username]}});
-    if (room) {
-      Rooms.update(
-        {_id: room._id},
-        {$pull: {users: expiredUsers[i].username}},
-        function(e) {
-          // Do Nothing
+Meteor.publish (null, function() {
+  Meteor.users.find({ "status.online": true }).observe({
+    removed: function(user){
+      if (user.roomId) {
+        var room = Rooms.findOne(user.roomId);
+        if (room) {
+          console.log(room.title);
+          Meteor.call('exitFromServer', user.roomId, user._id, function(error, info) {
+            if (!error && info.closed) {
+              RoomStream.emit(info._id + ':close');
+            }
+          });
         }
-      );
-
-      var message = {
-        message: "User " + expiredUsers[i].username + " exited.",
-        roomId: room._id,
-        user: "System"
-      };
-
-      Messages.insert(message);
+      }
     }
-
-    room = Rooms.findOne({hostName: expiredUsers[i].username});
-    if (room) {
-      Messages.remove({roomId: room._id}); 
-      Rooms.remove(room);
-    }
-    LoggedUsers.remove({username: expiredUsers[i].username});
-  }
-
-  var loggedUsernames = _.map(
-    LoggedUsers.find().fetch(),
-    function(user) {
-      return user.username;
-    }
-  );
-  Rooms.remove({hostName: {$nin: loggedUsernames}});
-}, 3000);
-
-
-Meteor.methods({
-  removeLogged: function(username) {
-    LoggedUsers.remove({username: username});
-  }
+  });
 });
+
+/* Meteor.setInterval(function() {
+  // TODO: Take Care of Ghosts Here
+}, 20000); */

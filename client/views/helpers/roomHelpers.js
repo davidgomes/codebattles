@@ -3,25 +3,10 @@ joinRoom = function(roomId) {
   var user = Meteor.user();
 
   if (room && user) {
-/*    Meteor.users.update(
-      Meteor.userId(),
-      {$set: {roomId: roomId}}
-    );*/
-
-    Meteor.call('logInsert', user.username, function(error, roomId) {
-      if (error) {
-        throwError(error.reason);
-      }
+    chatCollection.remove({});
+    chatCollection.insert({
+      user: "System",
+      message: "User " + user.username + " has entered the room."
     });
-
-    heartBeat = Meteor.setInterval(function(){
-      Meteor.call('logUpdate', user.username, function(error, roomId) {
-        if (error) {
-          throwError(error.reason);
-        }
-      });
-    }, 1000);
-
-    Session.set('currentRoomId', roomId);
   }
 };

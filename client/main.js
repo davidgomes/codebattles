@@ -4,15 +4,15 @@ Template.main.loggedIn = function() {
 
 rooms = Meteor.subscribe('rooms');
 
-Meteor.autosubscribe(function () {
+/*Meteor.autosubscribe(function () {
   Meteor.subscribe('messages', Session.get('currentRoomId'));
-});
+});*/
 
 Deps.autorun(function() {
   Meteor.subscribe('usersLSub');
-  if (!Session.get("currentRoomId")) {
+/* if (!Session.get("currentRoomId")) {
     if (!(typeof heartBeat === 'undefined')) {
       Meteor.clearInterval(heartBeat);
     }
-  }
+  }*/
 });

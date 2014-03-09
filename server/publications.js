@@ -6,6 +6,6 @@ Meteor.publish('usersLSub', function(){
   return Meteor.users.find();
 });
 
-Meteor.publish('messages', function(roomId) {
+/*Meteor.publish('messages', function(roomId) {
   return Messages.find({roomId: roomId});
-});
+});*/

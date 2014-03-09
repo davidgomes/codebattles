@@ -17,6 +17,10 @@ Messages.deny({
 
 Meteor.methods({
   sendMessage: function(messageText, roomId) {
+    if (this.isSimulation) {
+      return;
+    }
+    
     var user = Meteor.user();
     var room = Rooms.findOne({_id: roomId, users: user.username});
 
@@ -40,12 +44,19 @@ Meteor.methods({
       throw new Meteor.Error(422, "Messages should have a maximum of 140 characters");
     }
 
-    var message = {
+/*    var message = {
       message: messageText,
       roomId: roomId,
       user: user.username
+ };*/
+
+    var message = {
+      text: messageText,
+      user: user.username
     };
 
-    Messages.insert(message);
+    RoomStream.emit(roomId + ':message', message);
+
+//    Messages.insert(message);
   }
 });

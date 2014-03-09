@@ -31,7 +31,9 @@ var setTitle = function (w) {
 };
 
 function updateTitle() {
-  var room = Rooms.findOne(Session.get('currentRoomId'));
+  console.log(getRoom());
+
+  var room = Rooms.findOne(getRoom());
 
   if (!room) {
     return;
@@ -99,19 +101,20 @@ Template.renderRoom.created = function() {
 
 Template.renderRoom.helpers({
   currentRoom: function() {
-    return Rooms.findOne(Session.get('currentRoomId'));
+    return Rooms.findOne(getRoom());
   },
 
   userRoom: function() {
-    return Meteor.user().roomId;
+    return getRoom();
   },
 
   messageList: function() {
-    return Messages.find({roomId: Session.get('currentRoomId')});
+    //return Messages.find({roomId: Session.get('currentRoomId')});
+    return chatCollection.find();
   },
 
   roomUsers: function() {
-    var room = Rooms.findOne(Session.get('currentRoomId'));
+    var room = Rooms.findOne(getRoom());
     var usernames = room.users, users = [];
     usernames.push(room.hostName);
 
@@ -135,13 +138,13 @@ Template.renderRoom.helpers({
   },
 
   roundRunning: function() {
-    var room = Rooms.findOne(Session.get('currentRoomId'));
+    var room = Rooms.findOne(getRoom());
     return room.status === 1;
   },
 
   admin: function() {
     var user = Meteor.user();
-    var room = Rooms.findOne(Session.get('currentRoomId'));
+    var room = Rooms.findOne(getRoom());
     return room.status === 0 && room.hostName === user.username;
   },
 
@@ -163,13 +166,12 @@ Template.renderRoom.events({
     event.preventDefault();
 
     if (confirm("Exit Room?")) {
-      Meteor.call('exit', this.title, function(error) {
+      Meteor.call('exit', this.title, function(error, info) {
         if (error) {
           throwError(error.reason);
-        } else {
-          Meteor.clearInterval(heartBeat);
-          Session.set("currentRoomId", 0);
-          Meteor.call('removeLogged', Meteor.user().username);
+        }
+        if (info.closed) {
+          RoomStream.emit(info._id + ':close');
         }
       });
     }
@@ -178,29 +180,29 @@ Template.renderRoom.events({
   'submit form': function(event) {
     event.preventDefault();
 
-    Meteor.call('sendMessage', $(event.target).find('[name=message]').val(), Session.get('currentRoomId'), function(error) {
+    Meteor.call('sendMessage', $(event.target).find('[name=message]').val(), getRoom(), function(error) {
       if (error) {
         throwError(error.reason);
       } else {
         $(event.target).find('[name=message]').val("");
 
-        //scroll down
+/*        //scroll down
         var chatdiv = document.getElementById("chat-div");
-        chatdiv.scrollTop = chatdiv.scrollHeight;
+        chatdiv.scrollTop = chatdiv.scrollHeight;*/
       }
     });
   },
 
   'click .submit-button': function(event) {
     event.preventDefault();
-    Meteor.call('submit',editor.getValue(),language,Meteor.userId(),Session.get("currentRoomId"),function(error) {
+    Meteor.call('submit',editor.getValue(),language,Meteor.userId(), getRoom(), function(error) {
     });
   },
 
   'click .start-button': function(event) {
     event.preventDefault();
 
-    Meteor.call('startGame', Session.get('currentRoomId'), function(error) {
+    Meteor.call('startGame', getRoom(), function(error) {
       if (error) {
         throwError(error.reason);
       }
@@ -219,15 +221,19 @@ Template.renderRoom.events({
 });
 
 Template.renderRoom.rendered = function() {
-  var room = Rooms.findOne(Session.get("currentRoomId"));
+  var room = Rooms.findOne(getRoom());
 
   if (room && room.status === 0) {
     setProblem("");
   }
 
-  if (Session.get("currentRoomId") && !Rooms.findOne({_id: Session.get("currentRoomId")})) {
+  if (getRoom() && !Rooms.findOne({_id: getRoom()})) {
     alert("The host closed the room");
-    Session.set("currentRoomId", 0);
+    Meteor.call('exitRemoved', function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+    });
   }
 
   if (typeof editor === 'undefined') {

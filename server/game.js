@@ -1,3 +1,13 @@
+RoomStream = new Meteor.Stream('room_streams');
+
+RoomStream.permissions.read(function() {
+  return true;
+});
+
+RoomStream.permissions.write(function() {
+  return true;
+});
+
 var nextTime;
 
 Meteor.methods({
