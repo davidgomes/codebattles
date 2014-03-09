@@ -6,7 +6,6 @@
 standard-app-packages
 insecure
 preserve-inputs
-bootstrap
 accounts-ui
 accounts-password
 less
