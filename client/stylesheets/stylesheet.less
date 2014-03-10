@@ -8,10 +8,6 @@
   border-radius: @radius;
 }
 
-* {
-  .border-radius(0px) !important;
-}
-
 html {
   min-height: 100%;
 }
@@ -42,7 +38,7 @@ body {
 }
 
 /* Header */
-.navbar-inner {
+.navbar {
   .border-radius(0px);
 }
 
@@ -212,15 +208,8 @@ color: #333333 !important;
 #chat {
   font-size: 13px;
 
-  .form-inline {
-    .send-message {
-      width: 98%;
-      .border-radius(0px);
-    }
-  }
-
   .chat-wrapper {
-    .border-radius(0px);
+    .border-radius(4px);
     overflow: auto;
     height: 360px;
     width: 100%;
@@ -252,7 +241,7 @@ color: #333333 !important;
   .room-user {
     height: 50px;
     background-color: #bfbfbf !important;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 10px 71px 10px;
     margin-bottom: 12px;
 
     .left {
@@ -342,10 +331,6 @@ img {
 
 .form-inline {
   margin-top: 10px;
-}
-
-#difficulty-selection {
-  width: 100px;
 }
 
 .alpha-title {
