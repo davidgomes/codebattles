@@ -1,83 +1,98 @@
 <template name="header">
-  <header class="navbar navbar-inverse">
-    <div class="navbar-inner">
-      <a class="brand" href="#">CodeBattles <span class="alpha-title">Alpha Version</span></a>
+  <nav class="navbar navbar-default navbar-inverse" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">CodeBattles</a>
+      </div>
 
-      <ul class="nav">
-        <li><a href="#aboutModal" role="button" data-toggle="modal">About</a></li>
-      </ul>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav pull-right">
+          {{#if loggedIn}}
+            <li class="navbar-text">User: {{username}}</li>
+            <li><a href="#" class="logout">Sign Out</a></li>
+          {{else}}
+            <li><a href="#signInModal" data-toggle="modal">Sign In</a></li>
+          {{/if}}
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-      <ul class="nav pull-right">
-        {{#if loggedIn}}
-          <li><p class="navbar-text">User: {{username}}</p></li>
-          <li class="divider-vertical"></li>
-          <li><a href="#" class="logout">Sign Out</a></li>
-        {{else}}
-          <li><a href="#signInModal" role="button" data-toggle="modal">Sign In</a></li>
-        {{/if}}
-      </ul>
-    </div>
-  </header>
+  <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Sign In</h3>
+        </div>
 
-  <div id="signInModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel">Sign In</h3>
-    </div>
-    <div class="modal-body">
-      <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username" placeholder="Username..." />
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Password..."/>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary sign-in">Sign In</button>
+        <div class="modal-body">
+          <form>
+            <p>
+              <label for="username">Username:</label>
+              <input type="text" id="username" placeholder="Username..." />
+            </p>
+
+            <p>
+              <label for="password">Password:</label>
+              <input type="password" id="password" placeholder="Password..."/>
+            </p>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary sign-in">Sign In</button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">About CodeBattles</h3>
+        </div>
 
+        <div class="modal-body">
+          <p>
+            CodeBattles is an online platform for solving simple programming
+            exercises in a real-time competitive environment. The idea is to
+            have people engage in friendly contests against friends or unknowns to
+            have fun and improve their programming skills.
+          </p>
 
+          <h4>More about CodeBattles.</h4>
 
-  <div id="aboutModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel">About CodeBattles</h3>
-    </div>
-    <div class="modal-body">
-      <p>
-        CodeBattles is an online platform for solving simple programming
-        exercises in a real-time competitive environment. The idea is to
-        have people engage in friendly contests against friends or unknowns to
-        have fun and improve their programming skills.
-      </p>
+          <p>
+            CodeBattles was made at <a href="http://shiftappens.com">Shift
+            APPens</a>, a hackathon organized in Portugal where 50
+            participants took part to make an app in 48 hours. CodeBattles
+            was made by David Gomes, Pedro Paredes and André Baptista.
+          </p>
 
-      <h4>More about CodeBattles.</h4>
+          <h4>How does it work?</h4>
 
-      <p>
-        CodeBattles was made at <a href="http://shiftappens.com">Shift
-          APPens</a>, a hackathon organized in Portugal where 50
-        participants took part to make an app in 48 hours. CodeBattles
-        was made by David Gomes, Pedro Paredes and André Baptista.
-      </p>
+          <p>
+            The idea is that you join rooms to play games of 5 rounds
+            (around 2 minutes each) and are then ranked on how fast you can
+            solve the problems. For now, you can use both Python 2 and 3,
+            but we intend to add support for other languages in the future.
+          </p>
 
-      <h4>How does it work?</h4>
+          <p>
+            All you have to do to start playing is sign up for an account
+            and you can then pick any room to start playing!
+          </p>
+        </div>
 
-      <p>
-        The idea is that you join rooms to play games of 5 rounds
-        (around 2 minutes each) and are then ranked on how fast you can
-        solve the problems. For now, you can use both Python 2 and 3,
-        but we intend to add support for other languages in the future.
-      </p>
-
-      <p>
-        All you have to do to start playing is sign up for an account
-        and you can then pick any room to start playing!
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
