@@ -1,5 +1,5 @@
 <template name="header">
-  <nav class="navbar navbar-default" role="navigation">
+  <nav class="navbar navbar-default navbar-inverse" role="navigation">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -8,11 +8,16 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Link</a></li>
+        <ul class="nav navbar-nav pull-right">
+          {{#if loggedIn}}
+            <li class="navbar-text">User: {{username}}</li>
+            <li><a href="#" class="logout">Sign Out</a></li>
+          {{else}}
+            <li><a href="#signInModal" data-toggle="modal">Sign In</a></li>
+          {{/if}}
         </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+      </div>
+    </div>
   </nav>
 
   <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
