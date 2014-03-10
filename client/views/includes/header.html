@@ -1,23 +1,19 @@
 <template name="header">
-  <header class="navbar navbar-inverse">
-    <div class="navbar-inner">
-      <a class="brand" href="#">CodeBattles <span class="alpha-title">Alpha Version</span></a>
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">CodeBattles</a>
+      </div>
 
-      <ul class="nav">
-        <li><a href="#aboutModal" role="button" data-toggle="modal">About</a></li>
-      </ul>
-
-      <ul class="nav pull-right">
-        {{#if loggedIn}}
-          <li><p class="navbar-text">User: {{username}}</p></li>
-          <li class="divider-vertical"></li>
-          <li><a href="#" class="logout">Sign Out</a></li>
-        {{else}}
-          <li><a href="#signInModal" role="button" data-toggle="modal">Sign In</a></li>
-        {{/if}}
-      </ul>
-    </div>
-  </header>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Link</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
   <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
     <div class="modal-dialog">
