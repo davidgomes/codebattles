@@ -114,7 +114,6 @@ Meteor.methods({
       user._id,
       {$set: {roomId: room._id}}
     );
-    console.log("Changing");
 
     var message = {
       text: "User " + user.username + " has entered the room.",

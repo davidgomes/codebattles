@@ -31,8 +31,6 @@ var setTitle = function (w) {
 };
 
 function updateTitle() {
-  console.log(getRoom());
-
   var room = Rooms.findOne(getRoom());
 
   if (!room) {

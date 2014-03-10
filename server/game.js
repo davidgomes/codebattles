@@ -177,7 +177,6 @@ Meteor.methods({
 
         var sTime = Rooms.findOne(roomId).startTime;
         var timeLeft = Math.round(2 * 60 * 1000 + sTime - Date.now()) / 1000;
-        console.log("left: " + timeLeft.toString());
         Rooms.update(roomId, {
           $set: {startTime: Date.now() + Math.min(30, timeLeft) * 1000 - 2 * 60 * 1000}
         });
