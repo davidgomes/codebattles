@@ -11,6 +11,6 @@ To run the app follow these commands:
 
     git clone git@github.com:gangsterveggies/codebattles.git
     cd codebattles
-    meteor
+    mrt
 
 It should run on `http://localhost:3000`.
