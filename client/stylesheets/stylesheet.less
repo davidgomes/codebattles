@@ -139,6 +139,29 @@ header {
   margin-top: 20px;
 }
 
+#room-table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+
+  td, th {
+    text-align: center;
+    vertical-align: middle;
+
+    &.players, &.join {
+      width: 80px;
+    }
+
+    &.join {
+      text-align: right;
+    }
+
+    &.room-name {
+      text-align: left;
+    }
+  }
+}
+
 /* Game Room */
 #editordiv {
   font-size: 14px;
