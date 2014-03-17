@@ -1,11 +1,39 @@
 RoomStream = new Meteor.Stream('room_streams');
 
-RoomStream.permissions.read(function() {
-  return true;
+RoomStream.permissions.read(function(eventName) {
+  var match = eventName.match(/(.*):/);
+
+  if (match.length == 2) {
+    var roomId = match[1];
+    var room = Rooms.findOne(roomId);
+    var user = Meteor.users.findOne(this.userId);
+
+    if (user && room) {
+      if (room.hostName == user.username || _.contains(room.users, user.username)) {
+        return true;
+      }
+    }
+  }
+  
+  return false;
 });
 
-RoomStream.permissions.write(function() {
-  return true;
+RoomStream.permissions.write(function(eventName) {
+  var match = eventName.match(/(.*):/);
+
+  if (match.length == 2) {
+    var roomId = match[1];
+    var room = Rooms.findOne(roomId);
+    var user = Meteor.users.findOne(this.userId);
+
+    if (user && room) {
+      if (room.hostName == user.username || _.contains(room.users, user.username)) {
+        return true;
+      }
+    }
+  }
+  
+  return false;
 });
 
 var nextTime;
