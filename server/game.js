@@ -53,12 +53,11 @@ Meteor.methods({
     }
 
     var message = {
-      message: "Round " + (room.round).toString()  + " started!",
-      roomId: roomId,
+      text: "Round " + (room.round).toString()  + " started!",
       user: "System"
     };
 
-    Messages.insert(message);
+    RoomStream.emit(roomId + ':message', message);
 
     var problem;
     var probId;
@@ -85,25 +84,23 @@ Meteor.methods({
     }
 
     var message = {
-      message: "Round " + room.round  + " has just finished!",
-      roomId: roomId,
+      text: "Round " + room.round  + " has just finished!",
       user: "System"
     };
 
-    Messages.insert(message);
+    RoomStream.emit(roomId + ':message', message);
 
     if (room.round === 5) {
       Rooms.update(roomId, {
         $inc: {status: 1}
       });
 
-      var message = {
-        message: "Game over! Thanks for playing!",
-        roomId: roomId,
+      message = {
+        text: "Game over! Thanks for playing!",
         user: "System"
       };
 
-      Messages.insert(message);
+      RoomStream.emit(roomId + ':message', message);
 
       var users = room.users;
       var ranks = [];
@@ -139,12 +136,11 @@ Meteor.methods({
       }
 
       message = {
-        message: "Rankings updated.",
-        roomId: roomId,
+        text: "Rankings updated.",
         user: "System"
       };
 
-      Messages.insert(message);
+      RoomStream.emit(roomId + ':message', message);
     }
     else {
       Rooms.update(roomId, {
@@ -152,13 +148,12 @@ Meteor.methods({
         $set: {startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000}
       });
 
-      var message = {
-        message: "Round " + (room.round + 1).toString()  + " is about to start! 10 seconds remaining!",
-        roomId: roomId,
+      message = {
+        text: "Round " + (room.round + 1).toString()  + " is about to start! 10 seconds remaining!",
         user: "System"
       };
 
-      Messages.insert(message);
+      RoomStream.emit(roomId + ':message', message);
 
       nextTime = Meteor.setTimeout(function() {
         Meteor.call('startRound', roomId);
@@ -193,12 +188,11 @@ Meteor.methods({
         var score = Math.round(2000 * ((120 + (-Date.now() + room.countTime) / 1000) / 120));
  
         var message = {
-          message: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
-          roomId: roomId,
+          text: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
           user: "System"
         };
 
-        Messages.insert(message);
+        RoomStream.emit(roomId + ':message', message);
 
         Meteor.users.update(userId, {
           $inc: {score: score},
@@ -217,31 +211,29 @@ Meteor.methods({
         }, Math.min(30, timeLeft) * 1000);
 
         if (timeLeft >= 30) {
-          var message = {
-            message: "A User has got an accepted problem, so 30 seconds left!",
-            roomId: roomId,
+
+          message = {
+            text: "A User has got an accepted problem, so 30 seconds left!",
             user: "System"
           };
 
-          Messages.insert(message);          
+          RoomStream.emit(roomId + ':message', message);
         }
 
         return;
       } else if (response === "Wrong Answer") {
         message = {
-          message: "User " + user.username  + " submited the problem for 0 points. Wrong Answer!",
-          roomId: roomId,
+          text: "User " + user.username  + " submited the problem for 0 points. Wrong Answer!",
           user: "System"
         };
       } else {
         message = {
-          message: "User " + user.username  + " submited the problem for 0 points. Runtime Error! " + response,
-          roomId: roomId,
+          text: "User " + user.username  + " submited the problem for 0 points. Runtime Error! " + response,
           user: "System"
         };
       }
 
-      Messages.insert(message);
+      RoomStream.emit(roomId + ':message', message);
     });
   },
 

@@ -9,3 +9,9 @@ Meteor.publish('usersLSub', function(){
 Meteor.publish('ownUser', function(){
   return Meteor.users.find(this.userId, {fields: {roomId: 1}});
 });
+
+Meteor.users.deny({
+  update: function (){
+    return true;
+  }
+});

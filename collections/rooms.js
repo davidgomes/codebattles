@@ -3,7 +3,7 @@
    0 - stopped
    1 - running
    2 - ended
-*/
+ */
 
 Rooms = new Meteor.Collection('rooms');
 
@@ -61,14 +61,6 @@ Meteor.methods({
       {$set: {roomId: roomId}}
     );
 
-    /*    var message = {
-      message: "User " + user.username + " has entered the room.",
-      roomId: roomId,
-      user: "System"
-    };
-
-    Messages.insert(message);*/
-
     return roomId;
   },
 
@@ -101,14 +93,6 @@ Meteor.methods({
     }, {
       $addToSet: {users: user.username}
     });
-
-    /*    var message = {
-      message: "User " + user.username + " has entered the room.",
-      roomId: room._id,
-      user: "System"
-    };
-
-    Messages.insert(message);*/
 
     Meteor.users.update(
       user._id,
@@ -155,8 +139,7 @@ Meteor.methods({
     });
 
     var message = {
-      message: "Round 1 is about to start! 10 seconds remaining!",
-      roomId: room._id,
+      text: "Round 1 is about to start! 10 seconds remaining!",
       user: "System"
     };
 
@@ -180,7 +163,7 @@ Meteor.methods({
       {$set: {score: 0}}
     );
 
-    Messages.insert(message);
+    RoomStream.emit(roomId + ':message', message);
 
     Meteor.setTimeout(function() {
       Meteor.call('startRound', roomId);
@@ -216,15 +199,6 @@ Meteor.methods({
       throw new Meteor.Error(301, "You should be in the room to exit the room");
     }
 
-    /*
-    var message = {
-      message: "User " + user.username + " exited.",
-      roomId: room._id,
-      user: "System"
-    };
-
-    Messages.insert(message);*/
-
     Meteor.users.update(
       user._id,
       {$set: {roomId: 0}}
@@ -238,7 +212,6 @@ Meteor.methods({
     RoomStream.emit(room._id + ':message', message);
 
     Rooms.update({title: roomTitle}, {$pull : {users: user.username}});
-    //    LoggedUsers.remove({username: user.username});
 
     return {closed: false, _id: 0};
   },
@@ -265,15 +238,6 @@ Meteor.methods({
       return {closed: false, _id: 0};
     }
 
-    /*
-    var message = {
-      message: "User " + user.username + " exited.",
-      roomId: room._id,
-      user: "System"
-    };
-
-    Messages.insert(message);*/
-
     Meteor.users.update(
       userId,
       {$set: {roomId: 0}}
@@ -287,7 +251,6 @@ Meteor.methods({
     RoomStream.emit(roomId + ':message', message);
 
     Rooms.update({title: room.title}, {$pull : {users: user.username}});
-    //    LoggedUsers.remove({username: user.username});
 
     return {closed: false, _id: 0};
   },
