@@ -168,6 +168,7 @@ Template.renderRoom.events({
         if (error) {
           throwError(error.reason);
         }
+
         if (info.closed) {
           RoomStream.emit(info._id + ':close');
         }

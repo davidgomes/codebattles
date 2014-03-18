@@ -17,7 +17,7 @@ chatCollection = new Meteor.Collection(null);
 RoomStream = new Meteor.Stream('room_streams');
 
 Deps.autorun(function() {
-  RoomStream.on(getRoom() + ':message', function(message) {
+/*  RoomStream.on(getRoom() + ':message', function(message) {
     chatCollection.insert({
       user: message.user,
       message: message.text
@@ -33,5 +33,5 @@ Deps.autorun(function() {
         }
       });
     }
-  });
+  });*/
 });

@@ -8,6 +8,8 @@ RoomStream.permissions.read(function(eventName) {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
 
+    console.log(user.username + " " + room.users.length.toString());
+
     if (user && room) {
       if (room.hostName == user.username || _.contains(room.users, user.username)) {
         return true;
