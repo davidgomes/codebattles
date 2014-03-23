@@ -16,22 +16,20 @@ getRoom = function () {
 chatCollection = new Meteor.Collection(null);
 RoomStream = new Meteor.Stream('room_streams');
 
-Deps.autorun(function() {
-/*  RoomStream.on(getRoom() + ':message', function(message) {
-    chatCollection.insert({
-      user: message.user,
-      message: message.text
-    });
+RoomStream.on('message', function(message) {
+  chatCollection.insert({
+    user: message.user,
+    message: message.text
   });
+});
 
-  RoomStream.on(getRoom() + ':close', function() {
-    if (getRoom()) {
-      alert("The host closed the room");
-      Meteor.call('exitRemoved', function(error) {
-        if (error) {
-          throwError(error.reason);
-        }
-      });
-    }
-  });*/
+RoomStream.on('close', function() {
+  if (getRoom()) {
+    alert("The host closed the room");
+    Meteor.call('exitRemoved', function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+    });
+  }
 });

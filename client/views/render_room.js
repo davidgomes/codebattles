@@ -164,13 +164,9 @@ Template.renderRoom.events({
     event.preventDefault();
 
     if (confirm("Exit Room?")) {
-      Meteor.call('exit', this.title, function(error, info) {
+      Meteor.call('exit', this.title, function(error) {
         if (error) {
           throwError(error.reason);
-        }
-
-        if (info.closed) {
-          RoomStream.emit(info._id + ':close');
         }
       });
     }

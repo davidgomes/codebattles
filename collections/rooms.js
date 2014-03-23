@@ -101,10 +101,11 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has entered the room.",
-      user: "System"
+      user: "System",
+      roomId: room._id
     };
 
-    RoomStream.emit(room._id + ':message', message);
+    RoomStream.emit('message', message);
 
     return room._id;
   },
@@ -140,7 +141,8 @@ Meteor.methods({
 
     var message = {
       text: "Round 1 is about to start! 10 seconds remaining!",
-      user: "System"
+      user: "System",
+      roomId: roomId
     };
 
     Meteor.users.update(
@@ -163,7 +165,7 @@ Meteor.methods({
       {$set: {score: 0}}
     );
 
-    RoomStream.emit(roomId + ':message', message);
+    RoomStream.emit('message', message);
 
     Meteor.setTimeout(function() {
       Meteor.call('startRound', roomId);
@@ -175,7 +177,7 @@ Meteor.methods({
     var user = Meteor.user();
     
     if (!room) {
-      return {closed: false, _id: 0};
+      return;
     }
 
     if (!user) {
@@ -192,7 +194,7 @@ Meteor.methods({
 
       var id = room._id;
       Rooms.remove(room._id);
-      return {closed: true, _id: id};
+      return;
     }
 
     if (!_.contains(room.users, user.username)) {
@@ -206,14 +208,15 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has exited the room.",
-      user: "System"
+      user: "System",
+      roomId: room._id
     };
 
-    RoomStream.emit(room._id + ':message', message);
+    RoomStream.emit('message', message);
 
     Rooms.update({title: roomTitle}, {$pull : {users: user.username}});
 
-    return {closed: false, _id: 0};
+    return;
   },
 
   exitFromServer: function(roomId, userId){
@@ -221,7 +224,7 @@ Meteor.methods({
     var user = Meteor.users.findOne(userId);
 
     if (!room || !user) {
-      return {closed: false, _id: 0};
+      return;
     }
 
     if (room.hostName === user.username) {
@@ -231,11 +234,11 @@ Meteor.methods({
       );
 
       Rooms.remove(roomId);
-      return {closed: true, _id: roomId};
+      return;
     }
 
     if (!_.contains(room.users, user.username)) {
-      return {closed: false, _id: 0};
+      return;
     }
 
     Meteor.users.update(
@@ -245,14 +248,15 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has exited the room.",
-      user: "System"
+      user: "System",
+      roomId: roomId
     };
 
-    RoomStream.emit(roomId + ':message', message);
+    RoomStream.emit('message', message);
 
     Rooms.update({title: room.title}, {$pull : {users: user.username}});
 
-    return {closed: false, _id: 0};
+    return;
   },
 
   exitRemoved: function(){

@@ -1,30 +1,8 @@
 RoomStream = new Meteor.Stream('room_streams');
 
-RoomStream.permissions.read(function(eventName) {
-  var match = eventName.match(/(.*):/);
-
-  if (match.length == 2) {
-    var roomId = match[1];
-    var room = Rooms.findOne(roomId);
-    var user = Meteor.users.findOne(this.userId);
-
-    console.log(user.username + " " + room.users.length.toString());
-
-    if (user && room) {
-      if (room.hostName == user.username || _.contains(room.users, user.username)) {
-        return true;
-      }
-    }
-  }
-  
-  return false;
-});
-
-RoomStream.permissions.write(function(eventName) {
-  var match = eventName.match(/(.*):/);
-
-  if (match.length == 2) {
-    var roomId = match[1];
+RoomStream.permissions.read(function(eventName, message) {
+  if (message && message.roomId) {
+    var roomId = message.roomId;
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
 
@@ -36,9 +14,30 @@ RoomStream.permissions.write(function(eventName) {
   }
   
   return false;
-});
+}, false);
 
-var nextTime;
+RoomStream.permissions.write(function(eventName, message) {
+  if (message && message.roomId) {
+    var roomId = message.roomId;
+    var room = Rooms.findOne(roomId);
+    var user = Meteor.users.findOne(this.userId);
+
+    if (!message.user || user.username != message.user) {
+      return false;
+    }
+
+    if (user && room) {
+      if (room.hostName == user.username || _.contains(room.users, user.username)) {
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}, false);
+
+
+var nextTime; // Timeout object for next event
 
 Meteor.methods({
   startRound: function(roomId) {
@@ -54,10 +53,11 @@ Meteor.methods({
 
     var message = {
       text: "Round " + (room.round).toString()  + " started!",
-      user: "System"
+      user: "System",
+      roomId: roomId
     };
 
-    RoomStream.emit(roomId + ':message', message);
+    RoomStream.emit('message', message);
 
     var problem;
     var probId;
@@ -85,10 +85,11 @@ Meteor.methods({
 
     var message = {
       text: "Round " + room.round  + " has just finished!",
-      user: "System"
+      user: "System",
+      roomId: roomId
     };
 
-    RoomStream.emit(roomId + ':message', message);
+    RoomStream.emit('message', message);
 
     if (room.round === 5) {
       Rooms.update(roomId, {
@@ -97,10 +98,11 @@ Meteor.methods({
 
       message = {
         text: "Game over! Thanks for playing!",
-        user: "System"
+        user: "System",
+        roomId: roomId
       };
 
-      RoomStream.emit(roomId + ':message', message);
+      RoomStream.emit('message', message);
 
       var users = room.users;
       var ranks = [];
@@ -137,10 +139,11 @@ Meteor.methods({
 
       message = {
         text: "Rankings updated.",
-        user: "System"
+        user: "System",
+        roomId: roomId
       };
 
-      RoomStream.emit(roomId + ':message', message);
+      RoomStream.emit('message', message);
     }
     else {
       Rooms.update(roomId, {
@@ -150,10 +153,11 @@ Meteor.methods({
 
       message = {
         text: "Round " + (room.round + 1).toString()  + " is about to start! 10 seconds remaining!",
-        user: "System"
+        user: "System",
+        roomId: roomId
       };
 
-      RoomStream.emit(roomId + ':message', message);
+      RoomStream.emit('message', message);
 
       nextTime = Meteor.setTimeout(function() {
         Meteor.call('startRound', roomId);
@@ -189,10 +193,11 @@ Meteor.methods({
  
         var message = {
           text: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
-          user: "System"
+          user: "System",
+          roomId: roomId
         };
 
-        RoomStream.emit(roomId + ':message', message);
+        RoomStream.emit('message', message);
 
         Meteor.users.update(userId, {
           $inc: {score: score},
@@ -214,26 +219,29 @@ Meteor.methods({
 
           message = {
             text: "A User has got an accepted problem, so 30 seconds left!",
-            user: "System"
+            user: "System",
+            roomId: roomId
           };
 
-          RoomStream.emit(roomId + ':message', message);
+          RoomStream.emit('message', message);
         }
 
         return;
       } else if (response === "Wrong Answer") {
         message = {
           text: "User " + user.username  + " submited the problem for 0 points. Wrong Answer!",
-          user: "System"
+          user: "System",
+          roomId: roomId
         };
       } else {
         message = {
           text: "User " + user.username  + " submited the problem for 0 points. Runtime Error! " + response,
-          user: "System"
+          user: "System",
+          roomId: roomId
         };
       }
 
-      RoomStream.emit(roomId + ':message', message);
+      RoomStream.emit('message', message);
     });
   },
 

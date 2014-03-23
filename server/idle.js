@@ -4,11 +4,7 @@ Meteor.publish (null, function() {
       if (user.roomId) {
         var room = Rooms.findOne(user.roomId);
         if (room) {
-          Meteor.call('exitFromServer', user.roomId, user._id, function(error, info) {
-            if (!error && info.closed) {
-              RoomStream.emit(info._id + ':close');
-            }
-          });
+          Meteor.call('exitFromServer', user.roomId, user._id, function(error, info) {});
         }
       }
     }
