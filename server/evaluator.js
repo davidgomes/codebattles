@@ -28,12 +28,8 @@ var Evaluator = (function() {
         command = 'python3 -c "' + code + '"';
       } else if (language === 'python2') {
         command = 'python2 -c "' + code + '"';
-      } else if (language === 'c') {
-        code = code.replace('%', '%%');
-        command = 'printf "' + code + '" > ' + userId + '.c;gcc ' + userId + '.c -lm -o ' + userId + ';./' + userId;
-      } else if (language === 'cpp') {
-        code = code.replace('%', '%%');
-        command = 'printf "' + code + '" > ' + userId + '.cpp;g++ ' + userId + '.c -lm -o ' + userId + ';./' + userId;
+      } else if (language === 'ruby') {
+        command = 'ruby -e "' + code + '"';
       }
 
       var options = { encoding: 'utf8', timeout: 1000,

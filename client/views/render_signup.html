@@ -2,27 +2,42 @@
   <div id="cbattles">
     <hh1><strong>CodeBattles</strong></hh1>
   </div>
+
   <div id="login-wrapper">
-    <a href="#signUpModal" role="button" class="btn btn-primary" data-toggle="modal">Sign Up Now!</a>
+    <a href="#signUpModal" role="button" class="btn btn-primary" data-toggle="modal">Sign Up!</a>
   </div>
 
-  <div id="signUpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel">Sign Up</h3>
-    </div>
-    <div class="modal-body">
-      <form>
-        <label for="username">Username:</label>
-        <input type="text" id="username_field" placeholder="Username..." />
-        <label for="password">Password:</label>
-        <input type="password" id="password_field" placeholder="Password..." />
-        <label for="password_confirmation">Password Confirmation:</label>
-        <input type="password" id="password_confirmation" placeholder="Confirm..." />
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary sign-up">Sign Up</button>
+  <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Sign Up</h3>
+        </div>
+
+        <div class="modal-body">
+          <form>
+            <p>
+              <label for="username">Username:</label>
+              <input type="text" id="username_field" placeholder="Username..." />
+            </p>
+
+            <p>
+              <label for="password">Password:</label>
+              <input type="password" id="password_field" placeholder="Password..." />
+            </p>
+
+            <p>
+              <label for="password_confirmation">Password Confirmation:</label>
+              <input type="password" id="password_confirmation" placeholder="Confirm..." />
+            </p>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary sign-up">Sign Up</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

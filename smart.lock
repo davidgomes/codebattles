@@ -3,7 +3,8 @@
   "dependencies": {
     "basePackages": {
       "streams": {},
-      "user-status": {}
+      "user-status": {},
+      "bootstrap-3": {}
     },
     "packages": {
       "streams": {
@@ -15,6 +16,11 @@
         "git": "https://github.com/mizzao/meteor-user-status.git",
         "tag": "v0.2.0",
         "commit": "e18cc48440710d0ac23bd1a578974f9142226bf4"
+      },
+      "bootstrap-3": {
+        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
+        "tag": "v3.1.1-1",
+        "commit": "63dd38968828bb8963636df93e9a1c45e2dfe67e"
       }
     }
   }

@@ -14,7 +14,7 @@
     {{/if}}
 
     <div class="row">
-      <div class="span3 user-list" id="room-list">
+      <div class="col-sm-3 user-list" id="room-list">
         {{#each roomUsers}}
           {{> roomUser}}
         {{/each}}
@@ -22,7 +22,7 @@
         <input type="button" value="Exit Room" class="btn btn-primary exit-button"/>
       </div>
 
-      <div class="span6" id="editordiv">
+      <div class="col-sm-6" id="editordiv">
         {{#constant}}
           <div id="actual-editor">
           </div>
@@ -32,6 +32,7 @@
           <select id="language-selection">
             <option value="python2">Python 2</option>
             <option value="python3">Python 3</option>
+            <option value="ruby">Ruby</option>
           </select>
         </div>
 
@@ -47,15 +48,15 @@
     </div>
 
     {{#isolate}}
-      <div class="span3" id="chat">
+      <div class="col-sm-3" id="chat">
         <div class="chat-wrapper" id="chat-div">
           {{#each messageList}}
             <p><span class="chat-user">{{user}}:</span> {{message}}</p>
           {{/each}}
        </div>
 
-        <form class="form-inline">
-          <input name="message" type="text" value="" class="send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
+        <form role="form">
+          <input name="message" type="text" value="" class="form-control send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
         </form>
       </div>
     {{/isolate}}

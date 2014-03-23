@@ -1,6 +1,7 @@
 {
   "packages": {
     "streams": {},
-    "user-status": {}
+    "user-status": {},
+    "bootstrap-3": {}
   }
 }

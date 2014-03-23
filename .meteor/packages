@@ -6,9 +6,9 @@
 standard-app-packages
 insecure
 preserve-inputs
-bootstrap
 accounts-ui
 accounts-password
 less
 streams
 user-status
+bootstrap-3
