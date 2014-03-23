@@ -95,7 +95,6 @@ Template.renderRoom.helpers({
   },
 
   messageList: function() {
-    //return Messages.find({roomId: Session.get('currentRoomId')});
     return chatCollection.find();
   },
 
