@@ -1,6 +1,8 @@
 <template name="renderRoom">
   {{#with currentRoom}}
-    <h3>{{roomTitle}}</h3>
+    {{#isolate}}
+      <h3>{{roomTitle}}</h3>
+    {{/isolate}}
 
     {{#if problemFull}}
       <div class="problem-statement">

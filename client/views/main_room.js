@@ -36,14 +36,3 @@ RoomStream.on('message', function(message) {
     }
   });
 });
-
-RoomStream.on('close', function() {
-  if (getRoom()) {
-    alert("The host closed the room");
-    Meteor.call('exitRemoved', function(error) {
-      if (error) {
-        throwError(error.reason);
-      }
-    });
-  }
-});
