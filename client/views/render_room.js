@@ -209,7 +209,7 @@ Template.renderRoom.events({
 
   'change #language-selection': function(event) {
     language = document.getElementById('language-selection').value;
-
+    
     if (language.slice(0, 6) === 'python') {
       editor.setOption('mode', 'python');
     } else if (language === 'ruby') {
