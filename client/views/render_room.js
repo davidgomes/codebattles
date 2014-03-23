@@ -212,8 +212,8 @@ Template.renderRoom.events({
 
     if (language.slice(0, 6) === 'python') {
       editor.setOption('mode', 'python');
-    } else if (language === 'c' || language === 'cpp') {
-      editor.setOption('mode', 'clike');
+    } else if (language === 'ruby') {
+      editor.setOption('mode', 'ruby');
     }
   }
 });
