@@ -93,7 +93,7 @@ Meteor.methods({
 
     if (room.round === 5) {
       Rooms.update(roomId, {
-        $inc: {status: 1}
+        $set: {status: 0}
       });
 
       message = {

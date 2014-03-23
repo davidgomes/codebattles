@@ -18,21 +18,18 @@ RoomStream = new Meteor.Stream('room_streams');
 
 RoomStream.on('message', function(message) {
   var chatdiv = document.getElementById("chat-div");
-  var scroll = false;
-
-  if (chatdiv != undefined) {
-    console.log(chatdiv.scrollHeight + " " +  chatdiv.scrollTop + " " + chatdiv.clientHeight);
-    if (chatdiv.scrollHeight - chatdiv.scrollTop - 10 < chatdiv.clientHeight) {
-      scroll = true;
-    }
-  }
 
   chatCollection.insert({
     user: message.user,
     message: message.text
-  }, function(error) {
-    if (scroll) {
-      chatdiv.scrollTop = chatdiv.scrollHeight - chatdiv.clientHeight;
+  });
+});
+
+
+Meteor.autosubscribe(function(){
+  chatCollection.find().observe({
+    added: function(item){
+      setTimeout("$('#chat-div').scrollTop($('#chat-div')[0].scrollHeight)", 10);
     }
   });
 });
