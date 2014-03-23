@@ -3,7 +3,6 @@ var _titleDeps = new Deps.Dependency;
 var _problem = "";
 var _problemDeps = new Deps.Dependency;
 var locRound = 0;
-var bscroll;
 var language = "python2";
 
 var problem = function () {
@@ -79,18 +78,7 @@ function reloadEditor() {
                  $(".chat-wrapper").height() + 13);
 }
 
-function updateScroll() {
-  var chatdiv = document.getElementById("chat-div");
-
-  if (chatdiv != undefined) {
-    if (chatdiv.scrollHeight - chatdiv.scrollTop >= 350) {
-      chatdiv.scrollTop = chatdiv.scrollHeight;
-    }
-  }
-}
-
 Meteor.setInterval(updateTitle, 1000);
-Meteor.setInterval(updateScroll, 150);
 
 Template.renderRoom.created = function() {
   updateTitle();
@@ -180,10 +168,6 @@ Template.renderRoom.events({
         throwError(error.reason);
       } else {
         $(event.target).find('[name=message]').val("");
-
-/*        //scroll down
-        var chatdiv = document.getElementById("chat-div");
-        chatdiv.scrollTop = chatdiv.scrollHeight;*/
       }
     });
   },
