@@ -1,15 +1,13 @@
 CodeBattles
 ===========
 
-The Shift Appens project from the ADP team.
-
-A fun game for the whole family made with Meteor.js.
+Try CodeBattles to learn programming or to take your programming skills to the next level.
 
 ## How to run
 
 To run the app follow these commands:
 
-    git clone git@github.com:gangsterveggies/codebattles.git
+    git clone git@github.com:davidgomes/codebattles.git
     cd codebattles
     mrt
 
