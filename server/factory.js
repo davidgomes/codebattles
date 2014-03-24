@@ -1,6 +1,4 @@
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    Rooms.remove({});
-    Meteor.users.update({}, {$set: {roomId: 0}}, {multi: true});
-  });
-}
+Meteor.startup(function () {
+  Rooms.remove({});
+  Meteor.users.update({}, {$set: {roomId: 0}}, {multi: true});
+});

@@ -10,7 +10,3 @@ Meteor.publish (null, function() {
     }
   });
 });
-
-/* Meteor.setInterval(function() {
-  // TODO: Take Care of Ghosts Here
-}, 20000); */
