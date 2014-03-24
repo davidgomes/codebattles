@@ -4,7 +4,7 @@ Template.mainRoom.helpers({
   }
 });
 
-getRoom = function () {
+getRoom = function() {
   if (Meteor.user()) {
     return Meteor.user().roomId;
   }
@@ -25,10 +25,9 @@ RoomStream.on('message', function(message) {
   });
 });
 
-
-Meteor.autosubscribe(function(){
-  chatCollection.find().observe({
-    added: function(item){
+Meteor.autosubscribe(function() {
+  chatCollection.find().observe( {
+    added: function(item) {
       setTimeout(function() {
         $('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
       }, 10);
