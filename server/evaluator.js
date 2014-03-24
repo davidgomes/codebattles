@@ -66,10 +66,10 @@ var Evaluator = (function() {
 var Future = Npm.require('fibers/future');
 var exec = Npm.require('child_process').exec;
 
-Meteor.startup(function() { });
+Meteor.startup(function() {});
 
 Meteor.methods({
-  runCode: function(code,language,userId,probNum) {
+  runCode: function(code, language, userId, probNum) {
     var future = new Future();
 
     Evaluator.run(code, language, userId, probNum, function(response) {
