@@ -12,7 +12,7 @@ RoomStream.permissions.read(function(eventName, message) {
       }
     }
   }
-  
+
   return false;
 }, false);
 
@@ -32,7 +32,7 @@ RoomStream.permissions.write(function(eventName, message) {
       }
     }
   }
-  
+
   return false;
 }, false);
 
@@ -62,14 +62,18 @@ Meteor.methods({
     var problem;
     var probId;
     var difficulty = room.difficulty;
-    while(1){
-      probId = Math.floor((Math.random()*nproblems)+1);
-      problem = problems[probId-1];
-      if (problem.difficulty === difficulty) break;
+
+    while (true) {
+      probId = Math.floor((Math.random() * nproblems) + 1);
+      problem = problems[probId - 1];
+
+      if (problem.difficulty === difficulty) {
+        break;
+      }
     }
 
-    Rooms.update(roomId,{$set: {statement: problem.statement}});
-    Rooms.update(roomId,{$set: {probNum: probId}});
+    Rooms.update(roomId, { $set: { statement: problem.statement } });
+    Rooms.update(roomId, { $set: { probNum: probId } });
 
     nextTime = Meteor.setTimeout(function() {
       Meteor.call('prepRound', roomId);
@@ -93,7 +97,7 @@ Meteor.methods({
 
     if (room.round === 5) {
       Rooms.update(roomId, {
-        $set: {status: 0}
+        $set: { status: 0 }
       });
 
       message = {
@@ -107,17 +111,19 @@ Meteor.methods({
       var users = room.users;
       var ranks = [];
       users.push(room.hostName);
+
       for (var j = 0; j < users.length; j++) {
-        var user = Meteor.users.findOne({username: users[j]});
+        var user = Meteor.users.findOne({ username: users[j] });
 
         var myScore = user.score;
         var myRank = user.ranking;
         var diff = 0, sumS = 0, sumR = 0;
 
         for (var i = 0; i < users.length; i++) {
-          var ouser = Meteor.users.findOne({username: users[i]});
+          var ouser = Meteor.users.findOne({ username: users[i] });
           var scoreI = ouser.score;
           var rankI = ouser.ranking;
+
           diff += myScore - scoreI;
           sumS += scoreI;
           sumR += rankI;
@@ -132,8 +138,8 @@ Meteor.methods({
 
       for (var j = 0; j < users.length; j++) {
         Meteor.users.update(
-          {username: users[j]},
-          {$set: {ranking: ranks[j]}}
+          { username: users[j] },
+          { $set: { ranking: ranks[j] } }
         );
       }
 
@@ -144,11 +150,10 @@ Meteor.methods({
       };
 
       RoomStream.emit('message', message);
-    }
-    else {
+    } else {
       Rooms.update(roomId, {
-        $inc: {round: 1},
-        $set: {startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000}
+        $inc: { round: 1 },
+        $set: { startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000 }
       });
 
       message = {
@@ -168,19 +173,19 @@ Meteor.methods({
   submit: function(code,language,userId,roomId){
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(userId);
- 
+
     if (!user || !room) {
       return;
     }
- 
+
     if (room.status != 1) {
       throw new Meteor.Error(401, "No game running...");
     }
- 
+
     if (user.lastSub >= room.round) {
       throw new Meteor.Error(401, "Already submited in this round...");
     }
- 
+
     if (room.startTime > Date.now()) {
       throw new Meteor.Error(401, "Round hasn't started yet...");
     }
@@ -190,7 +195,7 @@ Meteor.methods({
 
       if (response === "Accepted") {
         var score = Math.round(2000 * ((120 + (-Date.now() + room.countTime) / 1000) / 120));
- 
+
         var message = {
           text: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
           user: "System",
@@ -200,23 +205,24 @@ Meteor.methods({
         RoomStream.emit('message', message);
 
         Meteor.users.update(userId, {
-          $inc: {score: score},
-          $set: {lastSub: room.round}
+          $inc: { score: score },
+          $set: { lastSub: room.round }
         });
 
         var sTime = Rooms.findOne(roomId).startTime;
         var timeLeft = Math.round(2 * 60 * 1000 + sTime - Date.now()) / 1000;
+
         Rooms.update(roomId, {
-          $set: {startTime: Date.now() + Math.min(30, timeLeft) * 1000 - 2 * 60 * 1000}
+          $set: { startTime: Date.now() + Math.min(30, timeLeft) * 1000 - 2 * 60 * 1000 }
         });
 
         Meteor.clearTimeout(nextTime);
+
         nextTime = Meteor.setTimeout(function() {
           Meteor.call('prepRound', roomId);
         }, Math.min(30, timeLeft) * 1000);
 
         if (timeLeft >= 30) {
-
           message = {
             text: "A User has got an accepted problem, so 30 seconds left!",
             user: "System",
@@ -247,7 +253,7 @@ Meteor.methods({
 
   getUserScore: function(username) {
     var user = Meteor.users.find({username: username});
-    
+
     if (!user) {
       return 0;
     }
