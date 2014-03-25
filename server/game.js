@@ -224,7 +224,7 @@ Meteor.methods({
 
         if (timeLeft >= 30) {
           message = {
-            text: "A User has got an accepted problem, so 30 seconds left!",
+            text: "A user has got an accepted problem, so 30 seconds left!",
             user: "System",
             roomId: roomId
           };
