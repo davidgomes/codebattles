@@ -5,8 +5,7 @@ function sign() {
   Meteor.loginWithPassword(uname, password, function(error) {
     if (error) {
       throwError(error.reason);
-    }
-    else {
+    } else {
       $('#signInModal').modal('hide');
     }
   });
