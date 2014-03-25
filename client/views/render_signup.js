@@ -1,4 +1,4 @@
-function sign() {  
+function sign() {
   var password = $("#password_field").val();
   var password_confirmation = $("#password_confirmation").val();
   var uname = $("#username_field").val();
@@ -6,8 +6,7 @@ function sign() {
   if (password !== password_confirmation) {
     throwError("Passwords don't match!");
     return;
-  }
-  else if (!password) {
+  } else if (!password) {
     throwError("You need to set the password up.");
     return;
   }
@@ -18,8 +17,7 @@ function sign() {
   }, function(error) {
     if (error) {
       throwError(error.reason);
-    }
-    else {
+    } else {
       Meteor.loginWithPassword(uname, password);
       $('#signUpModal').modal('hide');
     }
@@ -31,6 +29,7 @@ Template.renderSignup.events({
     event.preventDefault();
     sign();
   },
+
   'submit #signUpModal form': function(event) {
     event.preventDefault();
     sign();
