@@ -1,14 +1,16 @@
+var MESSAGE_MAX_CHARS = 140;
+
 Meteor.methods({
-  sendMessage: function(messageText, roomId){
+  sendMessage: function(messageText, roomId) {
     if (this.isSimulation) {
       return;
     }
     
     var user = Meteor.user();
-    var room = Rooms.findOne({_id: roomId, users: user.username});
+    var room = Rooms.findOne({ _id: roomId, users: user.username });
 
     if (!room) {
-      room = Rooms.findOne({_id: roomId, hostName: user.username});
+      room = Rooms.findOne({ _id: roomId, hostName: user.username });
 
       if (!room) {
         return;
@@ -23,8 +25,8 @@ Meteor.methods({
       return;
     }
 
-    if (messageText.length > 140) {
-      throw new Meteor.Error(422, "Messages should have a maximum of 140 characters");
+    if (messageText.length > MESSAGE_MAX_CHARS) {
+      throw new Meteor.Error(422, "Messages should have a maximum of " + MESSAGE_MAX_CHARS +  " characters");
     }
 
     var message = {
