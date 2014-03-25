@@ -80,10 +80,8 @@ function reloadEditor() {
 
 Meteor.setInterval(updateTitle, 1000);
 
-Template.renderRoom.created = function() {
-  updateTitle();
-  editor = undefined;
-};
+
+// Helpers
 
 Template.renderRoom.helpers({
   currentRoom: function() {
@@ -146,6 +144,9 @@ Template.renderRoom.helpers({
   }
 });
 
+
+// Page Events
+
 Template.renderRoom.events({
   'click .exit-button': function(event) {
     event.preventDefault();
@@ -198,6 +199,15 @@ Template.renderRoom.events({
   }
 });
 
+
+// Meteor Events
+
+Template.renderRoom.created = function() {
+  updateTitle();
+  editor = undefined;
+};
+
+
 Template.renderRoom.rendered = function() {
   var room = Rooms.findOne(getRoom());
 
@@ -218,7 +228,3 @@ Template.renderRoom.rendered = function() {
     reloadEditor();
   }
 };
-
-Template.renderRoom.preserve(
-  ['.chat-wrapper']
-);
