@@ -99,6 +99,7 @@ Meteor.methods({
       Rooms.update(roomId, {
         $set: { status: 0 }
       });
+
       Rooms.update(roomId, {
         $set: { round: 0 }
       });
