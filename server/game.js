@@ -1,8 +1,10 @@
+var ROUND_TIME = 120; // Time in seconds for each round
+
 RoomStream = new Meteor.Stream('room_streams');
 
-RoomStream.permissions.read(function(eventName, message) {
-  if (message && message.roomId) {
-    var roomId = message.roomId;
+RoomStream.permissions.read(function(eventName, roomId, arg1) {
+  // if event is a message then arg1 is the message hash
+  if (roomId) {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
 
@@ -16,13 +18,13 @@ RoomStream.permissions.read(function(eventName, message) {
   return false;
 }, false);
 
-RoomStream.permissions.write(function(eventName, message) {
-  if (message && message.roomId) {
-    var roomId = message.roomId;
+RoomStream.permissions.write(function(eventName, roomId, arg1) {
+  // if event is a message then arg1 is the message hash
+  if (roomId && eventName === "message") {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
 
-    if (!message.user || user.username != message.user) {
+    if (!arg1.user || user.username != arg1.user) {
       return false;
     }
 
@@ -53,11 +55,10 @@ Meteor.methods({
 
     var message = {
       text: "Round " + (room.round).toString()  + " started!",
-      user: "System",
-      roomId: roomId
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', roomId, message);
 
     var problem;
     var probId;
@@ -72,8 +73,10 @@ Meteor.methods({
       }
     }
 
-    Rooms.update(roomId, { $set: { statement: problem.statement } });
+    Rooms.update(roomId, { $set: { statement: problem.statement } }); // TO BE REMOVED
     Rooms.update(roomId, { $set: { probNum: probId } });
+
+    RoomStream.emit("start", roomId, ROUND_TIME, problem.statement);
 
     nextTime = Meteor.setTimeout(function() {
       Meteor.call('prepRound', roomId);
@@ -87,13 +90,14 @@ Meteor.methods({
       return;
     }
 
-    var message = {
-      text: "Round " + room.round  + " has just finished!",
-      user: "System",
-      roomId: roomId
-    };
+    if (room.round > 0) {
+      var message = {
+        text: "Round " + room.round  + " has just finished!",
+        user: "System"
+      };
 
-    RoomStream.emit('message', message);
+      RoomStream.emit('message', roomId, message);
+    }
 
     if (room.round === 5) {
       Rooms.update(roomId, {
@@ -105,11 +109,11 @@ Meteor.methods({
 
       message = {
         text: "Game over! Thanks for playing!",
-        user: "System",
-        roomId: roomId
+        user: "System"
       };
 
-      RoomStream.emit('message', message);
+      RoomStream.emit('message', roomId, message);
+      RoomStream.emit("over", roomId);
 
       var users = room.users;
       var ranks = [];
@@ -148,11 +152,10 @@ Meteor.methods({
 
       message = {
         text: "Rankings updated.",
-        user: "System",
-        roomId: roomId
+        user: "System"
       };
 
-      RoomStream.emit('message', message);
+      RoomStream.emit('message', roomId, message);
     } else {
       Rooms.update(roomId, {
         $inc: { round: 1 },
@@ -161,11 +164,11 @@ Meteor.methods({
 
       message = {
         text: "Round " + (room.round + 1).toString()  + " is about to start! 10 seconds remaining!",
-        user: "System",
-        roomId: roomId
+        user: "System"
       };
 
-      RoomStream.emit('message', message);
+      RoomStream.emit('message', roomId, message);
+      RoomStream.emit("prestart", roomId, room.round + 1);
 
       nextTime = Meteor.setTimeout(function() {
         Meteor.call('startRound', roomId);
@@ -201,11 +204,10 @@ Meteor.methods({
 
         var message = {
           text: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
-          user: "System",
-          roomId: roomId
+          user: "System"
         };
 
-        RoomStream.emit('message', message);
+        RoomStream.emit('message', roomId, message);
 
         Meteor.users.update(userId, {
           $inc: { score: score },
@@ -228,11 +230,11 @@ Meteor.methods({
         if (timeLeft >= 30) {
           message = {
             text: "A User has got an accepted problem, so 30 seconds left!",
-            user: "System",
-            roomId: roomId
+            user: "System"
           };
 
-          RoomStream.emit('message', message);
+          RoomStream.emit('message', roomId, message);
+          RoomStream.emit('changeTime', roomId, 30);
         }
 
         return;
@@ -245,12 +247,11 @@ Meteor.methods({
       } else {
         message = {
           text: "User " + user.username  + " submited the problem for 0 points. Runtime Error! " + response,
-          user: "System",
-          roomId: roomId
+          user: "System"
         };
       }
 
-      RoomStream.emit('message', message);
+      RoomStream.emit('message', roomId,message);
     });
   },
 

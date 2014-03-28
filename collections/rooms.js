@@ -101,11 +101,10 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has entered the room.",
-      user: "System",
-      roomId: room._id
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', room._id, message);
 
     return room._id;
   },
@@ -135,16 +134,11 @@ Meteor.methods({
     }
 
     Rooms.update(room._id, {
-      $inc: {status: 1, round: 1},
-      $set: {startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000}
+      $inc: { status: 1},
+      $set: { startTime: Date.now() + 10 * 1000,
+              countTime: Date.now() + 10 * 1000 }
     });
 
-    var message = {
-      text: "Round 1 is about to start! 10 seconds remaining!",
-      user: "System",
-      roomId: roomId
-    };
-
     Meteor.users.update(
       {username: {$in: room.users}}, 
       {$set: {lastSub: 0}}
@@ -165,11 +159,7 @@ Meteor.methods({
       {$set: {score: 0}}
     );
 
-    RoomStream.emit('message', message);
-
-    Meteor.setTimeout(function() {
-      Meteor.call('startRound', roomId);
-    }, 10 * 1000);
+    Meteor.call('prepRound', roomId);
   },
 
   exit: function(roomTitle){
@@ -208,11 +198,10 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has exited the room.",
-      user: "System",
-      roomId: room._id
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', room._id, message);
 
     Rooms.update({title: roomTitle}, {$pull : {users: user.username}});
 
@@ -248,11 +237,10 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has exited the room.",
-      user: "System",
-      roomId: roomId
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', roomId, message);
 
     Rooms.update({title: room.title}, {$pull : {users: user.username}});
 

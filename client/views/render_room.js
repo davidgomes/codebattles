@@ -2,8 +2,10 @@ var _title = "";
 var _titleDeps = new Deps.Dependency;
 var _problem = "";
 var _problemDeps = new Deps.Dependency;
-var locRound = 0;
 var language = "python2";
+var updateTitleTimer;
+var roomTitle;
+var roundInfo;
 
 var problem = function () {
   _problemDeps.depend();
@@ -29,42 +31,6 @@ var setTitle = function (w) {
   }
 };
 
-function updateTitle() {
-  var room = Rooms.findOne(getRoom());
-
-  if (!room) {
-    return;
-  }
-
-  var tmptitle = room.title;
-
-  if (room.status === 1) {
-    tmptitle += " | Round " + room.round.toString();
-    var timeLeft = Math.round((room.startTime - Date.now()) / 1000);
-
-    if (timeLeft > 1) {
-      $(".code textarea").val("");
-    }
-
-    if (timeLeft > 0) {
-      setProblem("");
-      tmptitle += " | " + (timeLeft).toString();
-    } else if (timeLeft + 2 * 60 > 0) {
-      tmptitle += " | " + (timeLeft + 2 * 60).toString();
-
-      if (locRound < room.round) {
-        locRound = room.round;
-      }
-
-      setProblem(room.statement);
-    } else {
-      tmptitle += " Round Over";
-    }
-  }
-
-  setTitle(tmptitle);
-}
-
 function reloadEditor() {
   editor = new CodeMirror(document.getElementById('actual-editor'), {
     lineNumbers: true,
@@ -78,7 +44,61 @@ function reloadEditor() {
                  $(".chat-wrapper").height() + 13);
 }
 
-Meteor.setInterval(updateTitle, 1000);
+var preRoundTitle = function () {
+  var tmptitle = roomTitle;
+
+  tmptitle += " | Round " + roundInfo.number.toString();
+  var timeLeft = Math.max(0, Math.round((roundInfo.startTime - Date.now()) / 1000));
+
+  tmptitle += " | " + (timeLeft).toString();
+  tmptitle += " to start";
+
+  setTitle(tmptitle);
+  updateTitleTimer = Meteor.setTimeout(preRoundTitle, 1000);
+};
+
+var roundTitle = function () {
+  var tmptitle = roomTitle;
+
+  tmptitle += " | Round " + roundInfo.number.toString();
+  var timeLeft = Math.max(0, Math.round((roundInfo.startTime - Date.now()) / 1000));
+
+  tmptitle += " | " + (timeLeft).toString();
+  tmptitle += " left";
+
+  setTitle(tmptitle);
+  updateTitleTimer = Meteor.setTimeout(roundTitle, 1000);
+};
+
+
+// Event Listener
+
+RoomStream.on("prestart", function(roomId, roundNumber) {
+  Meteor.clearTimeout(updateTitleTimer);
+  roundInfo = {number: roundNumber, startTime: Date.now() + 10 * 1000};
+  preRoundTitle();
+  setProblem("");
+}); // Pre Round - Time left to start round
+
+
+RoomStream.on("start", function(roomId, roundTime, statement) {
+  Meteor.clearTimeout(updateTitleTimer);
+  roundInfo.startTime = Date.now() + roundTime * 1000;
+  roundTitle();
+  setProblem(statement);
+}); // Round Start
+
+RoomStream.on("changeTime", function(roomId, roundTime) {
+  Meteor.clearTimeout(updateTitleTimer);
+  roundInfo.startTime = Math.min(roundInfo.startTime, Date.now() + roundTime * 1000);
+  roundTitle();
+}); // Change time left, should be because someone got an AC
+
+RoomStream.on("over", function(roomId) {
+  Meteor.clearTimeout(updateTitleTimer);
+  setTitle(roomTitle + " | Game Over");
+  setProblem("");
+}); // Round Over
 
 
 // Helpers
@@ -152,6 +172,7 @@ Template.renderRoom.events({
     event.preventDefault();
 
     if (confirm("Exit Room?")) {
+      Meteor.clearTimeout(updateTitleTimer);
       Meteor.call('exit', this.title, function(error) {
         if (error) {
           throwError(error.reason);
@@ -203,17 +224,16 @@ Template.renderRoom.events({
 // Meteor Events
 
 Template.renderRoom.created = function() {
-  updateTitle();
   editor = undefined;
+  Meteor.clearTimeout(updateTitleTimer);
+  var room = Rooms.findOne(getRoom());
+  roomTitle = room.title;
+  setTitle(roomTitle);
 };
 
 
 Template.renderRoom.rendered = function() {
   var room = Rooms.findOne(getRoom());
-
-  if (room && room.status === 0) {
-    setProblem("");
-  }
 
   if (getRoom() && !Rooms.findOne({_id: getRoom()})) {
     alert("The host closed the room");
