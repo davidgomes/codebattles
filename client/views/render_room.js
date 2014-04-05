@@ -229,6 +229,7 @@ Template.renderRoom.created = function() {
   var room = Rooms.findOne(getRoom());
   roomTitle = room.title;
   setTitle(roomTitle);
+  setProblem("");
 };
 
 
