@@ -39,9 +39,70 @@ RoomStream.permissions.write(function(eventName, roomId, arg1) {
 }, false);
 
 
+/*
+ Game Methods:
+  - startGame    : Start a new Game
+  - startRound   : Start current round
+  - prepRound    : Finish previous round and setup 10 seconds to next or game over
+  - submit       : User code submit
+*/
+
 var nextTime; // Timeout object for next event
 
 Meteor.methods({
+  startGame: function(roomId) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    var user = Meteor.user();
+    var room = Rooms.findOne(roomId);
+
+    if (!user) {
+      throw new Meteor.Error(401, "You need to be logged in to start rounds");
+    }
+
+    if (!room) {
+      throw new Meteor.Error(302,  "Unexistent Room");
+    }
+
+    if (room.status != 0) {
+      throw new Meteor.Error(303,  "Round already started");
+    }
+
+    if (room.hostName !== user.username) {
+      throw new Meteor.Error(303,  "You are not the host...");
+    }
+
+    Rooms.update(room._id, {
+      $inc: { status: 1},
+      $set: { startTime: Date.now() + 10 * 1000,
+              countTime: Date.now() + 10 * 1000 }
+    });
+
+    Meteor.users.update(
+      {username: {$in: room.users}}, 
+      {$set: {lastSub: 0}}
+    );
+
+    Meteor.users.update(
+      {username: {$in: room.users}}, 
+      {$set: {score: 0}}
+    );
+
+    Meteor.users.update(
+      {username: room.hostName}, 
+      {$set: {lastSub: 0}}
+    );
+
+    Meteor.users.update(
+      {username: room.hostName}, 
+      {$set: {score: 0}}
+    );
+
+    Meteor.call('prepRound', roomId);
+  },
+  
   startRound: function(roomId) {
     if (this.isSimulation) {
       return;
@@ -73,14 +134,12 @@ Meteor.methods({
       }
     }
 
-    Rooms.update(roomId, { $set: { statement: problem.statement } }); // TO BE REMOVED
     Rooms.update(roomId, { $set: { probNum: probId } });
-
     RoomStream.emit("start", roomId, ROUND_TIME, problem.statement);
 
     nextTime = Meteor.setTimeout(function() {
       Meteor.call('prepRound', roomId);
-    }, 2 * 60 * 1000);
+    }, ROUND_TIME * 1000);
   },
 
   prepRound: function(roomId) {
@@ -200,7 +259,7 @@ Meteor.methods({
       var message;
 
       if (response === "Accepted") {
-        var score = Math.round(2000 * ((120 + (-Date.now() + room.countTime) / 1000) / 120));
+        var score = Math.round(2000 * ((ROUND_TIME + (-Date.now() + room.countTime) / 1000) / ROUND_TIME));
 
         var message = {
           text: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
@@ -215,10 +274,10 @@ Meteor.methods({
         });
 
         var sTime = Rooms.findOne(roomId).startTime;
-        var timeLeft = Math.round(2 * 60 * 1000 + sTime - Date.now()) / 1000;
+        var timeLeft = Math.round(ROUND_TIME * 1000 + sTime - Date.now()) / 1000;
 
         Rooms.update(roomId, {
-          $set: { startTime: Date.now() + Math.min(30, timeLeft) * 1000 - 2 * 60 * 1000 }
+          $set: { startTime: Date.now() + Math.min(30, timeLeft) * 1000 - ROUND_TIME * 1000 }
         });
 
         Meteor.clearTimeout(nextTime);
@@ -251,17 +310,7 @@ Meteor.methods({
         };
       }
 
-      RoomStream.emit('message', roomId,message);
+      RoomStream.emit('message', roomId, message);
     });
-  },
-
-  getUserScore: function(username) {
-    var user = Meteor.users.find({username: username});
-
-    if (!user) {
-      return 0;
-    }
-
-    return user.score;
   }
 });

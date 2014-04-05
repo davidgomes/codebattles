@@ -50,7 +50,6 @@ Meteor.methods({
       countTime: 0,
       difficulty: roomDifficulty,
       probNum: -1,
-
       users: []
     };
 
@@ -107,59 +106,6 @@ Meteor.methods({
     RoomStream.emit('message', room._id, message);
 
     return room._id;
-  },
-
-  startGame: function(roomId) {
-    if (this.isSimulation) {
-      return;
-    }
-
-    var user = Meteor.user();
-    var room = Rooms.findOne(roomId);
-
-    if (!user) {
-      throw new Meteor.Error(401, "You need to be logged in to start rounds");
-    }
-
-    if (!room) {
-      throw new Meteor.Error(302,  "Unexistent Room");
-    }
-
-    if (room.status != 0) {
-      throw new Meteor.Error(303,  "Round already started");
-    }
-
-    if (room.hostName !== user.username) {
-      throw new Meteor.Error(303,  "You are not the host...");
-    }
-
-    Rooms.update(room._id, {
-      $inc: { status: 1},
-      $set: { startTime: Date.now() + 10 * 1000,
-              countTime: Date.now() + 10 * 1000 }
-    });
-
-    Meteor.users.update(
-      {username: {$in: room.users}}, 
-      {$set: {lastSub: 0}}
-    );
-
-    Meteor.users.update(
-      {username: {$in: room.users}}, 
-      {$set: {score: 0}}
-    );
-
-    Meteor.users.update(
-      {username: room.hostName}, 
-      {$set: {lastSub: 0}}
-    );
-
-    Meteor.users.update(
-      {username: room.hostName}, 
-      {$set: {score: 0}}
-    );
-
-    Meteor.call('prepRound', roomId);
   },
 
   exit: function(roomTitle){
