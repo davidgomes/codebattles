@@ -1,5 +1,5 @@
 Meteor.publish('rooms', function() {
-  return Rooms.find();
+  return Rooms.find({}, { fields: { title: 1, users: 1, hostName: 1, difficulty: 1, status: 1 } });
 });
 
 Meteor.publish('usersLSub', function(){
