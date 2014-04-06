@@ -1,4 +1,4 @@
-/* 
+/*
  Room Statuses:
    0 - stopped
    1 - running
@@ -9,7 +9,7 @@ Rooms = new Meteor.Collection('rooms');
 
 Rooms.allow({
   insert: function (userId, room) {
-    return Meteor.user() && userId === room.hostId && Meteor.user().username === room.hostName && room.users.length === 0 && !Rooms.findOne({title: room.title});
+    return Meteor.user() && userId === room.hostId && Meteor.user().username === room.hostName && room.users.length === 0 && !Rooms.findOne({ title: room.title });
   }
 });
 
@@ -22,7 +22,7 @@ Rooms.deny({
 Meteor.methods({
   room: function(roomTitle, roomDifficulty) {
     var user = Meteor.user();
-    var roomCopy = Rooms.findOne({title: roomTitle});
+    var roomCopy = Rooms.findOne({ title: roomTitle });
 
     if (!user) {
       throw new Meteor.Error(401, "You need to be logged in to create rooms");
@@ -41,7 +41,7 @@ Meteor.methods({
     }
 
     Meteor.users.update(user._id, {
-      $set: {score: 0}
+      $set: { score: 0 }
     });
 
     var room = {
@@ -70,7 +70,7 @@ Meteor.methods({
 
   join: function(roomTitle) {
     var user = Meteor.user();
-    var room = Rooms.findOne({title: roomTitle});
+    var room = Rooms.findOne({ title: roomTitle });
 
     if (!user) {
       throw new Meteor.Error(401, "You need to be logged in to join rooms");
@@ -80,7 +80,7 @@ Meteor.methods({
       throw new Meteor.Error(302,  "Unexistent Room");
     }
 
-    if (room.users.length == 3) {
+    if (room.users.length === 3) {
       throw new Meteor.Error(303,  "Room Full");
     }
 
@@ -89,18 +89,15 @@ Meteor.methods({
     }
 
     Meteor.users.update(user._id, {
-      $set: {score: 0}
+      $set: { score: 0 }
     });
 
-    Rooms.update({
-      _id: room._id
-    }, {
-      $addToSet: {users: user.username}
-    });
+    Rooms.update({ _id: room._id },
+                 { $addToSet: { users: user.username }});
 
     Meteor.users.update(
       user._id,
-      {$set: {roomId: room._id}}
+      { $set: { roomId: room._id } }
     );
 
     var message = {
@@ -114,9 +111,9 @@ Meteor.methods({
   },
 
   exit: function(roomTitle){
-    var room = Rooms.findOne({title: roomTitle});
+    var room = Rooms.findOne({ title: roomTitle });
     var user = Meteor.user();
-    
+
     if (!room) {
       return;
     }
@@ -130,7 +127,7 @@ Meteor.methods({
     if (host === user.username) {
       Meteor.users.update(
         user._id,
-        {$set: {roomId: 0}}
+        { $set: { roomId: 0 } }
       );
 
       var id = room._id;
@@ -144,7 +141,7 @@ Meteor.methods({
 
     Meteor.users.update(
       user._id,
-      {$set: {roomId: 0}}
+      { $set: { roomId: 0 } }
     );
 
     var message = {
@@ -154,12 +151,12 @@ Meteor.methods({
 
     RoomStream.emit('message', room._id, message);
 
-    Rooms.update({title: roomTitle}, {$pull : {users: user.username}});
+    Rooms.update({title: roomTitle}, { $pull : { users: user.username } });
 
     return;
   },
 
-  exitFromServer: function(roomId, userId){
+  exitFromServer: function(roomId, userId) {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(userId);
 
@@ -170,7 +167,7 @@ Meteor.methods({
     if (room.hostName === user.username) {
       Meteor.users.update(
         userId,
-        {$set: {roomId: 0}}
+        { $set: { roomId: 0 } }
       );
 
       Rooms.remove(roomId);
@@ -183,7 +180,7 @@ Meteor.methods({
 
     Meteor.users.update(
       userId,
-      {$set: {roomId: 0}}
+      { $set: { roomId: 0 } }
     );
 
     var message = {
@@ -193,12 +190,12 @@ Meteor.methods({
 
     RoomStream.emit('message', roomId, message);
 
-    Rooms.update({title: room.title}, {$pull : {users: user.username}});
+    Rooms.update({title: room.title}, { $pull : { users: user.username } });
 
     return;
   },
 
-  exitRemoved: function(){
+  exitRemoved: function() {
     var user = Meteor.user();
 
     if (!user) {
@@ -207,7 +204,7 @@ Meteor.methods({
 
     Meteor.users.update(
       user._id,
-      {$set: {roomId: 0}}
+      { $set: { roomId: 0 } }
     );
   }
 });

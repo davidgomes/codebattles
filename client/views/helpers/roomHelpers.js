@@ -1,5 +1,5 @@
 joinRoom = function(roomId) {
-  var room = Rooms.findOne({_id: roomId});
+  var room = Rooms.findOne({ _id: roomId });
   var user = Meteor.user();
 
   if (room && user) {

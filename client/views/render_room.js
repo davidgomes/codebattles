@@ -7,24 +7,24 @@ var updateTitleTimer;
 var roomTitle;
 var roundInfo;
 
-var problem = function () {
+var problem = function() {
   _problemDeps.depend();
   return _problem;
 };
 
-var title = function () {
+var title = function() {
   _titleDeps.depend();
   return _title;
 };
 
-var setProblem = function (w) {
+var setProblem = function(w) {
   if (_problem !== w) {
     _problem = w;
     _problemDeps.changed();
   }
 };
 
-var setTitle = function (w) {
+var setTitle = function(w) {
   if (_title !== w) {
     _title = w;
     _titleDeps.changed();
@@ -118,11 +118,12 @@ Template.renderRoom.helpers({
 
   roomUsers: function() {
     var room = Rooms.findOne(getRoom());
-    var usernames = room.users, users = [];
+    var usernames = room.users;
+    var users = [];
     usernames.push(room.hostName);
 
     for (var i = 0; i < usernames.length; i++) {
-      users.push(Meteor.users.findOne({username: usernames[i]}));
+      users.push(Meteor.users.findOne({ username: usernames[i] }));
     }
 
     users.sort(function(u1, u2) {
@@ -136,18 +137,20 @@ Template.renderRoom.helpers({
     for (var i = 0; i < users.length; i++) {
       usernames.push(users[i].username);
     }
-    
+
     return usernames;
   },
 
   roundRunning: function() {
     var room = Rooms.findOne(getRoom());
+
     return room.status === 1;
   },
 
   admin: function() {
     var user = Meteor.user();
     var room = Rooms.findOne(getRoom());
+
     return room.status === 0 && room.hostName === user.username;
   },
 
@@ -211,7 +214,7 @@ Template.renderRoom.events({
 
   'change #language-selection': function(event) {
     language = document.getElementById('language-selection').value;
-    
+
     if (language.slice(0, 6) === 'python') {
       editor.setOption('mode', 'python');
     } else if (language === 'ruby') {
@@ -236,8 +239,9 @@ Template.renderRoom.created = function() {
 Template.renderRoom.rendered = function() {
   var room = Rooms.findOne(getRoom());
 
-  if (getRoom() && !Rooms.findOne({_id: getRoom()})) {
+  if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
     alert("The host closed the room");
+
     Meteor.call('exitRemoved', function(error) {
       if (error) {
         throwError(error.reason);

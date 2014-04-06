@@ -7,8 +7,7 @@ Template.mainRoom.helpers({
 getRoom = function() {
   if (Meteor.user()) {
     return Meteor.user().roomId;
-  }
-  else {
+  } else {
     return 0;
   }
 };
