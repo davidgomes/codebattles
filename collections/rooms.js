@@ -36,6 +36,10 @@ Meteor.methods({
       throw new Meteor.Error(302,  "There already is a room with that title");
     }
 
+    if (roomDifficulty !== "easy" && roomDifficulty !== "medium" && roomDifficulty !== "hard") {
+      throw new Meteor.Error(300,  "Invalid difficulty");
+    }
+
     Meteor.users.update(user._id, {
       $set: { score: 0 }
     });
@@ -50,7 +54,7 @@ Meteor.methods({
       countTime: 0,
       difficulty: roomDifficulty,
       probNum: -1,
-
+      acceptedUsers: 0,
       users: []
     };
 
@@ -98,79 +102,15 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has entered the room.",
-      user: "System",
-      roomId: room._id
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', room._id, message);
 
     return room._id;
   },
 
-  startGame: function(roomId) {
-    if (this.isSimulation) {
-      return;
-    }
-
-    var user = Meteor.user();
-    var room = Rooms.findOne(roomId);
-
-    if (!user) {
-      throw new Meteor.Error(401, "You need to be logged in to start rounds");
-    }
-
-    if (!room) {
-      throw new Meteor.Error(302,  "Unexistent Room");
-    }
-
-    if (room.status != 0) {
-      throw new Meteor.Error(303,  "Round already started");
-    }
-
-    if (room.hostName !== user.username) {
-      throw new Meteor.Error(303,  "You are not the host...");
-    }
-
-    Rooms.update(room._id, {
-      $inc: { status: 1, round: 1 },
-      $set: { startTime: Date.now() + 10 * 1000,
-              countTime: Date.now() + 10 * 1000 }
-    });
-
-    var message = {
-      text: "Round 1 is about to start! 10 seconds remaining!",
-      user: "System",
-      roomId: roomId
-    };
-
-    Meteor.users.update(
-      { username: { $in: room.users } },
-      { $set: { lastSub: 0 } }
-    );
-
-    Meteor.users.update(
-      { username: { $in: room.users } },
-      { $set: { score: 0 }}
-    );
-
-    Meteor.users.update(
-      { username: room.hostName },
-      { $set: { lastSub: 0 } }
-    );
-
-    Meteor.users.update(
-      { username: room.hostName },
-      { $set: { score: 0 }}
-    );
-
-    RoomStream.emit('message', message);
-
-    Meteor.setTimeout(function() {
-      Meteor.call('startRound', roomId);
-    }, 10 * 1000);
-  },
-
-  exit: function(roomTitle) {
+  exit: function(roomTitle){
     var room = Rooms.findOne({ title: roomTitle });
     var user = Meteor.user();
 
@@ -206,11 +146,10 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has exited the room.",
-      user: "System",
-      roomId: room._id
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', room._id, message);
 
     Rooms.update({title: roomTitle}, { $pull : { users: user.username } });
 
@@ -246,11 +185,10 @@ Meteor.methods({
 
     var message = {
       text: "User " + user.username + " has exited the room.",
-      user: "System",
-      roomId: roomId
+      user: "System"
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', roomId, message);
 
     Rooms.update({title: room.title}, { $pull : { users: user.username } });
 
