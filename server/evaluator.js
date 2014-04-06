@@ -32,16 +32,13 @@ var Evaluator = (function() {
         command = 'ruby -e "' + code + '"';
       }
 
-      var options = { encoding: 'utf8', timeout: 1000,
-                      maxBuffer: 100 * 1024, killSignal: 'SIGTERM' };
+      var options = { encoding: 'utf8', maxBuffer: 100 * 1024, killSignal: 'SIGTERM' };
 
       if (input.length > 0) {
         var tcommand = 'printf "' + input + '" > ' + userId + '.txt';
         var child = exec(tcommand, function(error, stdout, stderr) { });
         command += ' < ' + userId + '.txt';
       }
-
-      console.log(command);
 
       child = exec(command, options, function(error, stdout, stderr) {
         var response;
