@@ -75,9 +75,12 @@ Meteor.methods({
     }
 
     Rooms.update(room._id, {
-      $inc: { status: 1},
-      $set: { startTime: Date.now() + 10 * 1000,
-              countTime: Date.now() + 10 * 1000 }
+      $inc: { status: 1 },
+      $set: { startTime: Date.now() + 10 * 1000 }
+    });
+
+    Rooms.update(room._id, {
+      $set: { countTime: Date.now() + 10 * 1000 }
     });
 
     Meteor.users.update(
@@ -143,6 +146,10 @@ Meteor.methods({
   },
 
   prepRound: function(roomId) {
+    if (this.isSimulation) {
+      return;
+    }
+    
     var room = Rooms.findOne(roomId);
 
     if (!room) {
@@ -220,6 +227,9 @@ Meteor.methods({
         $inc: { round: 1 },
         $set: { startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000 }
       });
+      Rooms.update(roomId, {
+        $set: { acceptedUsers: 0 }
+      });
 
       message = {
         text: "Round " + (room.round + 1).toString()  + " is about to start! 10 seconds remaining!",
@@ -235,11 +245,19 @@ Meteor.methods({
     }
   },
 
-  submit: function(code,language,userId,roomId){
+  submit: function(code, language, userId, roomId){
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(userId);
 
+    if (this.isSimulation) {
+      return;
+    }
+
     if (!user || !room) {
+      return;
+    }
+
+    if (user._id != userId) {
       return;
     }
 
@@ -256,6 +274,7 @@ Meteor.methods({
     }
 
     Meteor.call('runCode', code, language, userId, room.probNum, function(error, response) {
+      var room = Rooms.findOne(roomId);
       var message;
 
       if (response === "Accepted") {
@@ -277,8 +296,16 @@ Meteor.methods({
         var timeLeft = Math.round(ROUND_TIME * 1000 + sTime - Date.now()) / 1000;
 
         Rooms.update(roomId, {
+          $inc: { acceptedUsers: 1 },
           $set: { startTime: Date.now() + Math.min(30, timeLeft) * 1000 - ROUND_TIME * 1000 }
         });
+
+        var room = Rooms.findOne(roomId);
+        if (room.acceptedUsers == (1 + room.users.length)) {
+          Meteor.clearTimeout(nextTime);
+          Meteor.call('prepRound', roomId);
+          return;
+        }
 
         Meteor.clearTimeout(nextTime);
 

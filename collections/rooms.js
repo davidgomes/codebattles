@@ -54,6 +54,7 @@ Meteor.methods({
       countTime: 0,
       difficulty: roomDifficulty,
       probNum: -1,
+      acceptedUsers: 0,
       users: []
     };
 
@@ -61,7 +62,7 @@ Meteor.methods({
 
     Meteor.users.update(
       user._id,
-      {$set: {roomId: roomId}}
+      { $set: { roomId: roomId } }
     );
 
     return roomId;
