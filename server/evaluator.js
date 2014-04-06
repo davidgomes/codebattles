@@ -49,8 +49,6 @@ var Evaluator = (function() {
             response = 'Accepted';
           } else {
             response = 'Wrong Answer';
-            console.log(stdout.toString());
-            console.log(output);
           }
         }
 
