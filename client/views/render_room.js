@@ -126,7 +126,7 @@ Template.renderRoom.helpers({
     }
 
     users.sort(function(u1, u2) {
-      if (u1.score != u2.score) {
+      if (u1.score !== u2.score) {
         return u1.score < u2.score;
       }
       return u1.ranking < u2.ranking;

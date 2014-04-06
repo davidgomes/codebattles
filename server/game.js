@@ -9,7 +9,7 @@ RoomStream.permissions.read(function(eventName, roomId, arg1) {
     var user = Meteor.users.findOne(this.userId);
 
     if (user && room) {
-      if (room.hostName == user.username || _.contains(room.users, user.username)) {
+      if (room.hostName === user.username || _.contains(room.users, user.username)) {
         return true;
       }
     }
@@ -24,12 +24,12 @@ RoomStream.permissions.write(function(eventName, roomId, arg1) {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
 
-    if (!arg1.user || user.username != arg1.user) {
+    if (!arg1.user || user.username !== arg1.user) {
       return false;
     }
 
     if (user && room) {
-      if (room.hostName == user.username || _.contains(room.users, user.username)) {
+      if (room.hostName === user.username || _.contains(room.users, user.username)) {
         return true;
       }
     }
@@ -66,7 +66,7 @@ Meteor.methods({
       throw new Meteor.Error(302,  "Unexistent Room");
     }
 
-    if (room.status != 0) {
+    if (room.status !== 0) {
       throw new Meteor.Error(303,  "Round already started");
     }
 
@@ -257,11 +257,11 @@ Meteor.methods({
       return;
     }
 
-    if (user._id != userId) {
+    if (user._id !== userId) {
       return;
     }
 
-    if (room.status != 1) {
+    if (room.status !== 1) {
       throw new Meteor.Error(401, "No game running...");
     }
 
@@ -301,7 +301,7 @@ Meteor.methods({
         });
 
         var room = Rooms.findOne(roomId);
-        if (room.acceptedUsers == (1 + room.users.length)) {
+        if (room.acceptedUsers === (1 + room.users.length)) {
           Meteor.clearTimeout(nextTime);
           Meteor.call('prepRound', roomId);
           return;

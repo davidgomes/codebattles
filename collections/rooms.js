@@ -36,7 +36,7 @@ Meteor.methods({
       throw new Meteor.Error(302,  "There already is a room with that title");
     }
 
-    if (roomDifficulty != "easy" && roomDifficulty != "medium" && roomDifficulty != "hard") {
+    if (roomDifficulty !== "easy" && roomDifficulty !== "medium" && roomDifficulty !== "hard") {
       throw new Meteor.Error(300,  "Invalid difficulty");
     }
 
