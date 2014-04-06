@@ -1,8 +1,6 @@
 <template name="renderRoom">
   {{#with currentRoom}}
-    {{#isolate}}
-      <h3>{{roomTitle}}</h3>
-    {{/isolate}}
+    <h3>{{roomTitle}}</h3>
 
     {{#if problemFull}}
       <div class="problem-statement">
@@ -23,11 +21,9 @@
       </div>
 
       <div class="col-sm-6" id="editordiv">
-        {{#constant}}
-          <div id="actual-editor">
-          </div>
-        {{/constant}}
-          
+        <div id="actual-editor">
+        </div>
+
         <div class="dropdown pull-left">
           <select id="language-selection" class="form-control">
             <option value="python2">Python 2</option>
@@ -45,21 +41,19 @@
             {{/if}}
           {{/if}}
         </form>
-    </div>
-
-    {{#isolate}}
+      </div>
+      
       <div class="col-sm-3" id="chat">
         <div class="chat-wrapper" id="chat-div">
           {{#each messageList}}
             <p><span class="chat-user">{{user}}:</span> {{message}}</p>
           {{/each}}
-       </div>
+        </div>
 
         <form role="form">
           <input name="message" type="text" value="" class="form-control send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
         </form>
       </div>
-    {{/isolate}}
     </div>
   {{/with}}
 </template>

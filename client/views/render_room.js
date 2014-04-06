@@ -105,10 +105,23 @@ RoomStream.on("over", function(roomId) {
 
 Template.renderRoom.helpers({
   currentRoom: function() {
-    return Rooms.findOne(getRoom());
+    var room = Rooms.findOne(getRoom());
+
+    if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
+      alert("The host closed the room");
+
+      Meteor.call('exitRemoved', function(error) {
+        if (error) {
+          throwError(error.reason);
+        }
+      });
+    }
+
+    return room;
   },
 
   userRoom: function() {
+    console.log("WS");
     return getRoom();
   },
 
@@ -226,28 +239,13 @@ Template.renderRoom.events({
 
 // Meteor Events
 
-Template.renderRoom.created = function() {
+Template.renderRoom.rendered = function() {
   editor = undefined;
   Meteor.clearTimeout(updateTitleTimer);
   var room = Rooms.findOne(getRoom());
   roomTitle = room.title;
   setTitle(roomTitle);
   setProblem("");
-};
-
-
-Template.renderRoom.rendered = function() {
-  var room = Rooms.findOne(getRoom());
-
-  if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
-    alert("The host closed the room");
-
-    Meteor.call('exitRemoved', function(error) {
-      if (error) {
-        throwError(error.reason);
-      }
-    });
-  }
 
   if (typeof editor === 'undefined') {
     reloadEditor();

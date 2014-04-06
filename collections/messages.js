@@ -31,10 +31,9 @@ Meteor.methods({
 
     var message = {
       text: messageText,
-      user: user.username,
-      roomId: roomId
+      user: user.username
     };
 
-    RoomStream.emit('message', message);
+    RoomStream.emit('message', roomId, message);
   }
 });
