@@ -217,7 +217,7 @@ Template.renderRoom.events({
 
   'click .submit-button': function(event) {
     event.preventDefault();
-    Meteor.call('submit',editor.getValue(),language,Meteor.userId(), getRoom(), function(error) {
+    Meteor.call('submit', editor.getValue(), language,Meteor.userId(), getRoom(), function(error) {
     });
   },
 
@@ -242,10 +242,10 @@ Template.renderRoom.events({
   },
 
   'keydown' : function(event) {
-    if (event.keyCode == altKey){
+    if (event.keyCode === altKey){
       hotKey = true;
     }
-    else if (event.keyCode == escKey){
+    else if (event.keyCode === escKey){
       if (confirm("Exit Room?")) {
         Meteor.clearTimeout(updateTitleTimer);
         Meteor.call('exit', this.title, function(error) {
@@ -259,7 +259,7 @@ Template.renderRoom.events({
 
   'keydown #message' : function(event) {
     if (hotKey){
-      if (event.keyCode == editorKey){
+      if (event.keyCode === editorKey){
         event.preventDefault();
         editor.focus();
       }
@@ -268,11 +268,11 @@ Template.renderRoom.events({
 
   'keydown #actual-editor' : function(event) {
     if (hotKey){
-      if (event.keyCode == enterKey){
-        Meteor.call('submit',editor.getValue(),language,Meteor.userId(), getRoom(), function(error) {
+      if (event.keyCode === enterKey){
+        Meteor.call('submit', editor.getValue(), language,Meteor.userId(), getRoom(), function(error) {
         });
       }
-      else if (event.keyCode == chatKey){
+      else if (event.keyCode === chatKey){
         event.preventDefault();
         $("#message").focus();
       }
@@ -280,7 +280,7 @@ Template.renderRoom.events({
   },
 
   'keyup #actual-editor' : function(event) {
-    if (event.keyCode == altKey){
+    if (event.keyCode === altKey){
       hotKey = false;
     }
   }
