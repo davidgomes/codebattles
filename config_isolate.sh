@@ -17,4 +17,4 @@ isolate --init
 # Adds python2, python3 and ruby to the box
 ln -s /usr/bin/python2 /tmp/box/0/box/python2
 ln -s /usr/bin/python3 /tmp/box/0/box/python3
-ln -s /usr/bin/ruby /tmp/box/0/box/ruby
+cp /usr/bin/ruby /tmp/box/0/box/ruby
