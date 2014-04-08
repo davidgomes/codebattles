@@ -7,11 +7,10 @@ var updateTitleTimer;
 var roomTitle;
 var roundInfo;
 var hotKey = false;
-var enterKey = 13;
+var submitKey = 83;
 var altKey = 18;
-var escKey = 27;
-var chatKey = 77;
-var editorKey = 75;
+var chatKey = 67;
+var editorKey = 87;
 
 var problem = function() {
   _problemDeps.depend();
@@ -244,22 +243,12 @@ Template.renderRoom.events({
   'keydown' : function(event) {
     if (event.keyCode === altKey) {
       hotKey = true;
-    } else if (event.keyCode === escKey) {
-      if (confirm("Exit Room?")) {
-        Meteor.clearTimeout(updateTitleTimer);
-        Meteor.call('exit', this.title, function(error) {
-          if (error) {
-            throwError(error.reason);
-          }
-        });
-      }
     }
   },
 
   'keydown #message' : function(event) {
     if (hotKey) {
       if (event.keyCode === editorKey) {
-        event.preventDefault();
         editor.focus();
       }
     }
@@ -267,17 +256,16 @@ Template.renderRoom.events({
 
   'keydown #actual-editor' : function(event) {
     if (hotKey) {
-      if (event.keyCode === enterKey) {
+      if (event.keyCode === submitKey) {
         Meteor.call('submit', editor.getValue(), language,Meteor.userId(), getRoom(), function(error) {
         });
       } else if (event.keyCode === chatKey) {
-        event.preventDefault();
         $("#message").focus();
       }
     }
   },
 
-  'keyup #actual-editor' : function(event) {
+  'keyup ' : function(event) {
     if (event.keyCode === altKey) {
       hotKey = false;
     }
