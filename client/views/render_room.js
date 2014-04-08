@@ -6,6 +6,11 @@ var language = "python2";
 var updateTitleTimer;
 var roomTitle;
 var roundInfo;
+var hotKey = false;
+var submitKey = 83;
+var altKey = 18;
+var chatKey = 67;
+var editorKey = 87;
 
 var problem = function() {
   _problemDeps.depend();
@@ -211,7 +216,7 @@ Template.renderRoom.events({
 
   'click .submit-button': function(event) {
     event.preventDefault();
-    Meteor.call('submit',editor.getValue(),language,Meteor.userId(), getRoom(), function(error) {
+    Meteor.call('submit', editor.getValue(), language,Meteor.userId(), getRoom(), function(error) {
     });
   },
 
@@ -232,6 +237,37 @@ Template.renderRoom.events({
       editor.setOption('mode', 'python');
     } else if (language === 'ruby') {
       editor.setOption('mode', 'ruby');
+    }
+  },
+
+  'keydown': function(event) {
+    if (event.keyCode === altKey) {
+      hotKey = true;
+    }
+  },
+
+  'keydown #message': function(event) {
+    if (hotKey) {
+      if (event.keyCode === editorKey) {
+        editor.focus();
+      }
+    }
+  },
+
+  'keydown #actual-editor': function(event) {
+    if (hotKey) {
+      if (event.keyCode === submitKey) {
+        Meteor.call('submit', editor.getValue(), language,Meteor.userId(), getRoom(), function(error) {
+        });
+      } else if (event.keyCode === chatKey) {
+        $("#message").focus();
+      }
+    }
+  },
+
+  'keyup': function(event) {
+    if (event.keyCode === altKey) {
+      hotKey = false;
     }
   }
 });
