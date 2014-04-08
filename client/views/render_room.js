@@ -240,13 +240,13 @@ Template.renderRoom.events({
     }
   },
 
-  'keydown' : function(event) {
+  'keydown': function(event) {
     if (event.keyCode === altKey) {
       hotKey = true;
     }
   },
 
-  'keydown #message' : function(event) {
+  'keydown #message': function(event) {
     if (hotKey) {
       if (event.keyCode === editorKey) {
         editor.focus();
@@ -254,7 +254,7 @@ Template.renderRoom.events({
     }
   },
 
-  'keydown #actual-editor' : function(event) {
+  'keydown #actual-editor': function(event) {
     if (hotKey) {
       if (event.keyCode === submitKey) {
         Meteor.call('submit', editor.getValue(), language,Meteor.userId(), getRoom(), function(error) {
@@ -265,7 +265,7 @@ Template.renderRoom.events({
     }
   },
 
-  'keyup ' : function(event) {
+  'keyup': function(event) {
     if (event.keyCode === altKey) {
       hotKey = false;
     }
