@@ -40,8 +40,7 @@ var Evaluator = (function() {
         command += ' < ' + userId + '.txt';
       }
 
-      var fcommand = "isolate -t 1 -e --run -- " + command;
-	  child = exec(fcommand, options, function(error, stdout, stderr) {
+      child = exec(command, options, function(error, stdout, stderr) {
         var response;
         if (error) {
           response = stderr.toString();
