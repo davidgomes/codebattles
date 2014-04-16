@@ -40,8 +40,8 @@ function reloadEditor() {
     theme: 'mbo'
   });
 
-  editor.setSize($('#editor').parent().width() - 100,
-                 $('.chat-wrapper').height() + 13);
+  editor.setSize($('#editor').parent().width(),
+                 $('.chat-wrapper').height());
 }
 
 var preRoundTitle = function () {
