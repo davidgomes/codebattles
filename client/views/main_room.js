@@ -16,7 +16,7 @@ chatCollection = new Meteor.Collection(null);
 RoomStream = new Meteor.Stream('room_streams');
 
 RoomStream.on('message', function(roomId, message) {
-  var chatdiv = document.getElementById("chat-div");
+  var chatdiv = document.getElementById('chat-div');
 
   chatCollection.insert({
     user: message.user,
