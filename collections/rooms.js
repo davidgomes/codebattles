@@ -18,19 +18,19 @@ Meteor.methods({
     var roomCopy = Rooms.findOne({ title: roomTitle });
 
     if (!user) {
-      throw new Meteor.Error(401, "You need to be logged in to create rooms");
+      throw new Meteor.Error(401, 'You need to be logged in to create rooms');
     }
 
     if (roomTitle.length > 25 || roomTitle.length <= 0) {
-      throw new Meteor.Error(422, "The room titles should go from 1 to 25 characters");
+      throw new Meteor.Error(422, 'The room titles should go from 1 to 25 characters');
     }
 
     if (roomCopy) {
-      throw new Meteor.Error(302, "There already is a room with that title");
+      throw new Meteor.Error(302, 'There already is a room with that title');
     }
 
-    if (roomDifficulty !== "easy" && roomDifficulty !== "medium" && roomDifficulty !== "hard") {
-      throw new Meteor.Error(300, "Invalid difficulty");
+    if (roomDifficulty !== 'easy' && roomDifficulty !== 'medium' && roomDifficulty !== 'hard') {
+      throw new Meteor.Error(300, 'Invalid difficulty');
     }
 
     Meteor.users.update(user._id, {
@@ -66,19 +66,19 @@ Meteor.methods({
     var room = Rooms.findOne({ title: roomTitle });
 
     if (!user) {
-      throw new Meteor.Error(401, "You need to be logged in to join rooms");
+      throw new Meteor.Error(401, 'You need to be logged in to join rooms');
     }
 
     if (!room) {
-      throw new Meteor.Error(302, "Unexistent Room");
+      throw new Meteor.Error(302, 'Unexistent Room');
     }
 
     if (room.users.length === 3) {
-      throw new Meteor.Error(303, "Room Full");
+      throw new Meteor.Error(303, 'Room Full');
     }
 
     if (room.status !== RoomStatuses.STOPPED) {
-      throw new Meteor.Error(303, "Game Started");
+      throw new Meteor.Error(303, 'Game Started');
     }
 
     Meteor.users.update(user._id, {
@@ -94,8 +94,8 @@ Meteor.methods({
     );
 
     var message = {
-      text: "User " + user.username + " has entered the room.",
-      user: "System"
+      text: 'User ' + user.username + ' has entered the room.',
+      user: 'System'
     };
 
     RoomStream.emit('message', room._id, message);
@@ -112,7 +112,7 @@ Meteor.methods({
     }
 
     if (!user) {
-      throw new Meteor.Error(401, "You should be logged in to exit a room");
+      throw new Meteor.Error(401, 'You should be logged in to exit a room');
     }
 
     var host = room.hostName;
@@ -129,7 +129,7 @@ Meteor.methods({
     }
 
     if (!_.contains(room.users, user.username)) {
-      throw new Meteor.Error(301, "You should be in the room to exit the room");
+      throw new Meteor.Error(301, 'You should be in the room to exit the room');
     }
 
     Meteor.users.update(
@@ -138,8 +138,8 @@ Meteor.methods({
     );
 
     var message = {
-      text: "User " + user.username + " has exited the room.",
-      user: "System"
+      text: 'User ' + user.username + ' has exited the room.',
+      user: 'System'
     };
 
     RoomStream.emit('message', room._id, message);
@@ -177,8 +177,8 @@ Meteor.methods({
     );
 
     var message = {
-      text: "User " + user.username + " has exited the room.",
-      user: "System"
+      text: 'User ' + user.username + ' has exited the room.',
+      user: 'System'
     };
 
     RoomStream.emit('message', roomId, message);
@@ -192,7 +192,7 @@ Meteor.methods({
     var user = Meteor.user();
 
     if (!user) {
-      throw new Meteor.Error(401, "You should be logged in to exit a room");
+      throw new Meteor.Error(401, 'You should be logged in to exit a room');
     }
 
     Meteor.users.update(

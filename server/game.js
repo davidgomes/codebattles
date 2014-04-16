@@ -20,7 +20,7 @@ RoomStream.permissions.read(function(eventName, roomId, arg1) {
 
 RoomStream.permissions.write(function(eventName, roomId, arg1) {
   // if event is a message then arg1 is the message hash
-  if (roomId && eventName === "message") {
+  if (roomId && eventName === 'message') {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
 
@@ -59,19 +59,19 @@ Meteor.methods({
     var room = Rooms.findOne(roomId);
 
     if (!user) {
-      throw new Meteor.Error(401, "You need to be logged in to start rounds");
+      throw new Meteor.Error(401, 'You need to be logged in to start rounds');
     }
 
     if (!room) {
-      throw new Meteor.Error(302,  "Unexistent Room");
+      throw new Meteor.Error(302,  'Unexistent Room');
     }
 
     if (room.status !== RoomStatuses.STOPPED) {
-      throw new Meteor.Error(303,  "Round already started");
+      throw new Meteor.Error(303,  'Round already started');
     }
 
     if (room.hostName !== user.username) {
-      throw new Meteor.Error(303,  "You are not the host...");
+      throw new Meteor.Error(303,  'You are not the host...');
     }
 
     Rooms.update(room._id, {
@@ -118,8 +118,8 @@ Meteor.methods({
     }
 
     var message = {
-      text: "Round " + (room.round).toString()  + " started!",
-      user: "System"
+      text: 'Round ' + (room.round).toString()  + ' started!',
+      user: 'System'
     };
 
     RoomStream.emit('message', roomId, message);
@@ -138,7 +138,7 @@ Meteor.methods({
     }
 
     Rooms.update(roomId, { $set: { probNum: probId } });
-    RoomStream.emit("start", roomId, ROUND_TIME, problem.statement);
+    RoomStream.emit('start', roomId, ROUND_TIME, problem.statement);
 
     nextTime = Meteor.setTimeout(function() {
       Meteor.call('prepRound', roomId);
@@ -158,8 +158,8 @@ Meteor.methods({
 
     if (room.round > 0) {
       var message = {
-        text: "Round " + room.round  + " has just finished!",
-        user: "System"
+        text: 'Round ' + room.round  + ' has just finished!',
+        user: 'System'
       };
 
       RoomStream.emit('message', roomId, message);
@@ -175,12 +175,12 @@ Meteor.methods({
       });
 
       message = {
-        text: "Game over! Thanks for playing!",
-        user: "System"
+        text: 'Game over! Thanks for playing!',
+        user: 'System'
       };
 
       RoomStream.emit('message', roomId, message);
-      RoomStream.emit("over", roomId);
+      RoomStream.emit('over', roomId);
 
       var users = room.users;
       var ranks = [];
@@ -218,8 +218,8 @@ Meteor.methods({
       }
 
       message = {
-        text: "Rankings updated.",
-        user: "System"
+        text: 'Rankings updated.',
+        user: 'System'
       };
 
       RoomStream.emit('message', roomId, message);
@@ -233,12 +233,12 @@ Meteor.methods({
       });
 
       message = {
-        text: "Round " + (room.round + 1).toString()  + " is about to start! 10 seconds remaining!",
-        user: "System"
+        text: 'Round ' + (room.round + 1).toString()  + ' is about to start! 10 seconds remaining!',
+        user: 'System'
       };
 
       RoomStream.emit('message', roomId, message);
-      RoomStream.emit("prestart", roomId, room.round + 1);
+      RoomStream.emit('prestart', roomId, room.round + 1);
 
       nextTime = Meteor.setTimeout(function() {
         Meteor.call('startRound', roomId);
@@ -263,27 +263,27 @@ Meteor.methods({
     }
 
     if (room.status !== RoomStatuses.RUNNING) {
-      throw new Meteor.Error(401, "No game running...");
+      throw new Meteor.Error(401, 'No game running...');
     }
 
     if (user.lastSub >= room.round) {
-      throw new Meteor.Error(401, "Already submited in this round...");
+      throw new Meteor.Error(401, 'Already submited in this round...');
     }
 
     if (room.startTime > Date.now()) {
-      throw new Meteor.Error(401, "Round hasn't started yet...");
+      throw new Meteor.Error(401, 'Round hasn\'t started yet...');
     }
 
     Meteor.call('runCode', code, language, userId, room.probNum, function(error, response) {
       var room = Rooms.findOne(roomId);
       var message;
 
-      if (response === "Accepted") {
+      if (response === 'Accepted') {
         var score = Math.round(2000 * ((ROUND_TIME + (-Date.now() + room.countTime) / 1000) / ROUND_TIME));
 
         var message = {
-          text: "User " + user.username  + " submited the problem for " + score.toString() + " points. Accepted!",
-          user: "System"
+          text: 'User ' + user.username  + ' submited the problem for ' + score.toString() + ' points. Accepted!',
+          user: 'System'
         };
 
         RoomStream.emit('message', roomId, message);
@@ -316,8 +316,8 @@ Meteor.methods({
 
         if (timeLeft >= 30) {
           message = {
-            text: "A User has got an accepted problem, so 30 seconds left!",
-            user: "System"
+            text: 'A User has got an accepted problem, so 30 seconds left!',
+            user: 'System'
           };
 
           RoomStream.emit('message', roomId, message);
@@ -325,16 +325,16 @@ Meteor.methods({
         }
 
         return;
-      } else if (response === "Wrong Answer") {
+      } else if (response === 'Wrong Answer') {
         message = {
-          text: "User " + user.username  + " submited the problem for 0 points. Wrong Answer!",
-          user: "System",
+          text: 'User ' + user.username  + ' submited the problem for 0 points. Wrong Answer!',
+          user: 'System',
           roomId: roomId
         };
       } else {
         message = {
-          text: "User " + user.username  + " submited the problem for 0 points. Runtime Error! " + response,
-          user: "System"
+          text: 'User ' + user.username  + ' submited the problem for 0 points. Runtime Error! ' + response,
+          user: 'System'
         };
       }
 
