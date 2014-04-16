@@ -66,7 +66,7 @@ Meteor.methods({
       throw new Meteor.Error(302,  "Unexistent Room");
     }
 
-    if (room.status !== 0) {
+    if (room.status !== RoomStatuses.STOPPED) {
       throw new Meteor.Error(303,  "Round already started");
     }
 
@@ -75,7 +75,7 @@ Meteor.methods({
     }
 
     Rooms.update(room._id, {
-      $inc: { status: 1 },
+      $inc: { status: RoomStatuses.RUNNING },
       $set: { startTime: Date.now() + 10 * 1000 }
     });
 
@@ -167,7 +167,7 @@ Meteor.methods({
 
     if (room.round === 5) {
       Rooms.update(roomId, {
-        $set: { status: 0 }
+        $set: { status: RoomStatuses.STOPPED }
       });
 
       Rooms.update(roomId, {
@@ -262,7 +262,7 @@ Meteor.methods({
       return;
     }
 
-    if (room.status !== 1) {
+    if (room.status !== RoomStatuses.RUNNING) {
       throw new Meteor.Error(401, "No game running...");
     }
 

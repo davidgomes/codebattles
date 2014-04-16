@@ -1,14 +1,7 @@
-/*
- Room Statuses:
-   0 - stopped
-   1 - running
-   2 - ended
- */
-
 Rooms = new Meteor.Collection('rooms');
 
 Rooms.allow({
-  insert: function (userId, room) {
+  insert: function(userId, room) {
     return Meteor.user() && userId === room.hostId && Meteor.user().username === room.hostName && room.users.length === 0 && !Rooms.findOne({ title: room.title });
   }
 });
@@ -33,11 +26,11 @@ Meteor.methods({
     }
 
     if (roomCopy) {
-      throw new Meteor.Error(302,  "There already is a room with that title");
+      throw new Meteor.Error(302, "There already is a room with that title");
     }
 
     if (roomDifficulty !== "easy" && roomDifficulty !== "medium" && roomDifficulty !== "hard") {
-      throw new Meteor.Error(300,  "Invalid difficulty");
+      throw new Meteor.Error(300, "Invalid difficulty");
     }
 
     Meteor.users.update(user._id, {
@@ -48,7 +41,7 @@ Meteor.methods({
       title: roomTitle,
       hostId: user._id,
       hostName: user.username,
-      status: 0,
+      status: RoomStatuses.STOPPED,
       round: 0,
       startTime: 0,
       countTime: 0,
@@ -77,15 +70,15 @@ Meteor.methods({
     }
 
     if (!room) {
-      throw new Meteor.Error(302,  "Unexistent Room");
+      throw new Meteor.Error(302, "Unexistent Room");
     }
 
     if (room.users.length === 3) {
-      throw new Meteor.Error(303,  "Room Full");
+      throw new Meteor.Error(303, "Room Full");
     }
 
-    if (room.status !== 0) {
-      throw new Meteor.Error(303,  "Game Started");
+    if (room.status !== RoomStatuses.STOPPED) {
+      throw new Meteor.Error(303, "Game Started");
     }
 
     Meteor.users.update(user._id, {
@@ -110,7 +103,7 @@ Meteor.methods({
     return room._id;
   },
 
-  exit: function(roomTitle){
+  exit: function(roomTitle) {
     var room = Rooms.findOne({ title: roomTitle });
     var user = Meteor.user();
 
@@ -151,7 +144,7 @@ Meteor.methods({
 
     RoomStream.emit('message', room._id, message);
 
-    Rooms.update({title: roomTitle}, { $pull : { users: user.username } });
+    Rooms.update({ title: roomTitle }, { $pull : { users: user.username } });
 
     return;
   },
@@ -190,7 +183,7 @@ Meteor.methods({
 
     RoomStream.emit('message', roomId, message);
 
-    Rooms.update({title: room.title}, { $pull : { users: user.username } });
+    Rooms.update({ title: room.title }, { $pull : { users: user.username } });
 
     return;
   },

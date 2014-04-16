@@ -157,14 +157,14 @@ Template.renderRoom.helpers({
   roundRunning: function() {
     var room = Rooms.findOne(getRoom());
 
-    return room.status === 1;
+    return room.status === RoomStatuses.STOPPED;
   },
 
   admin: function() {
     var user = Meteor.user();
     var room = Rooms.findOne(getRoom());
 
-    return room.status === 0 && room.hostName === user.username;
+    return room.status === RoomStatuses.STOPPED && room.hostName === user.username;
   },
 
   roomTitle: function() {
