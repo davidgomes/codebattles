@@ -88,23 +88,23 @@ Meteor.methods({
     });
 
     Meteor.users.update(
-      {username: {$in: room.users}},
-      {$set: {lastSub: 0}}
+      { username: { $in: room.users } },
+      { $set: { lastSub: 0 }}
     );
 
     Meteor.users.update(
-      {username: {$in: room.users}},
-      {$set: {score: 0}}
+      { username: { $in: room.users } },
+      { $set: { score: 0 } }
     );
 
     Meteor.users.update(
-      {username: room.hostName},
-      {$set: {lastSub: 0}}
+      { username: room.hostName },
+      { $set: { lastSub: 0 } }
     );
 
     Meteor.users.update(
-      {username: room.hostName},
-      {$set: {score: 0}}
+      { username: room.hostName },
+      { $set: { score: 0 } }
     );
 
     Meteor.call('prepRound', roomId);
