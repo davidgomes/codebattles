@@ -73,9 +73,9 @@ var roundTitle = function () {
 
 // Event Listener
 
-RoomStream.on('prestart', function(roomId, roundNumber) {
+RoomStream.on('prestart', function(roomId, roundNumber, betweenRoundTime) {
   Meteor.clearTimeout(updateTitleTimer);
-  roundInfo = {number: roundNumber, startTime: Date.now() + 10 * 1000};
+  roundInfo = {number: roundNumber, startTime: Date.now() + betweenRoundTime * 1000};
   preRoundTitle();
   setProblem('');
 }); // Pre Round - Time left to start round

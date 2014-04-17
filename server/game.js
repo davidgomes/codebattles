@@ -1,9 +1,12 @@
 var ROUND_TIME = 120; // Time in seconds for each round
+var AFTER_ACCEPTED_TIME = 30; // Time left for other users after first Accepted
+var BETWEEN_ROUND_TIME = 5; // Time between rounds
 
 RoomStream = new Meteor.Stream('room_streams');
 
 RoomStream.permissions.read(function(eventName, roomId, arg1) {
   // if event is a message then arg1 is the message hash
+
   if (roomId) {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
@@ -20,6 +23,7 @@ RoomStream.permissions.read(function(eventName, roomId, arg1) {
 
 RoomStream.permissions.write(function(eventName, roomId, arg1) {
   // if event is a message then arg1 is the message hash
+
   if (roomId && eventName === 'message') {
     var room = Rooms.findOne(roomId);
     var user = Meteor.users.findOne(this.userId);
@@ -43,7 +47,7 @@ RoomStream.permissions.write(function(eventName, roomId, arg1) {
  Game Methods:
   - startGame    : Start a new Game
   - startRound   : Start current round
-  - prepRound    : Finish previous round and setup 10 seconds to next or game over
+  - prepRound    : Finish previous round and setup BETWEEN_ROUND_TIME seconds to next or game over
   - submit       : User code submit
 */
 
@@ -63,49 +67,49 @@ Meteor.methods({
     }
 
     if (!room) {
-      throw new Meteor.Error(302,  'Unexistent Room');
+      throw new Meteor.Error(302, 'Unexistent Room');
     }
 
     if (room.status !== RoomStatuses.STOPPED) {
-      throw new Meteor.Error(303,  'Round already started');
+      throw new Meteor.Error(303, 'Round already started');
     }
 
     if (room.hostName !== user.username) {
-      throw new Meteor.Error(303,  'You are not the host...');
+      throw new Meteor.Error(303, 'You are not the host...');
     }
 
     Rooms.update(room._id, {
       $inc: { status: RoomStatuses.RUNNING },
-      $set: { startTime: Date.now() + 10 * 1000 }
+      $set: { startTime: Date.now() + BETWEEN_ROUND_TIME * 1000 }
     });
 
     Rooms.update(room._id, {
-      $set: { countTime: Date.now() + 10 * 1000 }
+      $set: { countTime: Date.now() + BETWEEN_ROUND_TIME * 1000 }
     });
 
     Meteor.users.update(
-      {username: {$in: room.users}}, 
+      {username: {$in: room.users}},
       {$set: {lastSub: 0}}
     );
 
     Meteor.users.update(
-      {username: {$in: room.users}}, 
+      {username: {$in: room.users}},
       {$set: {score: 0}}
     );
 
     Meteor.users.update(
-      {username: room.hostName}, 
+      {username: room.hostName},
       {$set: {lastSub: 0}}
     );
 
     Meteor.users.update(
-      {username: room.hostName}, 
+      {username: room.hostName},
       {$set: {score: 0}}
     );
 
     Meteor.call('prepRound', roomId);
   },
-  
+
   startRound: function(roomId) {
     if (this.isSimulation) {
       return;
@@ -128,14 +132,10 @@ Meteor.methods({
     var probId;
     var difficulty = room.difficulty;
 
-    while (true) {
+    do {
       probId = Math.floor((Math.random() * nproblems) + 1);
       problem = problems[probId - 1];
-
-      if (problem.difficulty === difficulty) {
-        break;
-      }
-    }
+    } while (problem.difficulty !== difficulty);
 
     Rooms.update(roomId, { $set: { probNum: probId } });
     RoomStream.emit('start', roomId, ROUND_TIME, problem.statement);
@@ -149,7 +149,7 @@ Meteor.methods({
     if (this.isSimulation) {
       return;
     }
-    
+
     var room = Rooms.findOne(roomId);
 
     if (!room) {
@@ -226,23 +226,25 @@ Meteor.methods({
     } else {
       Rooms.update(roomId, {
         $inc: { round: 1 },
-        $set: { startTime: Date.now() + 10 * 1000, countTime: Date.now() + 10 * 1000 }
+        $set: { startTime: Date.now() + BETWEEN_ROUND_TIME * 1000,
+                countTime: Date.now() + BETWEEN_ROUND_TIME * 1000 }
       });
+
       Rooms.update(roomId, {
         $set: { acceptedUsers: 0 }
       });
 
       message = {
-        text: 'Round ' + (room.round + 1).toString()  + ' is about to start! 10 seconds remaining!',
+        text: 'Round ' + (room.round + 1).toString()  + ' is about to start! ' + BETWEEN_ROUND_TIME + ' seconds remaining!',
         user: 'System'
       };
 
       RoomStream.emit('message', roomId, message);
-      RoomStream.emit('prestart', roomId, room.round + 1);
+      RoomStream.emit('prestart', roomId, room.round + 1, BETWEEN_ROUND_TIME);
 
       nextTime = Meteor.setTimeout(function() {
         Meteor.call('startRound', roomId);
-      }, 10 * 1000);
+      }, BETWEEN_ROUND_TIME * 1000);
     }
   },
 
@@ -293,12 +295,12 @@ Meteor.methods({
           $set: { lastSub: room.round }
         });
 
-        var sTime = Rooms.findOne(roomId).startTime;
-        var timeLeft = Math.round(ROUND_TIME * 1000 + sTime - Date.now()) / 1000;
+        var startTime = Rooms.findOne(roomId).startTime;
+        var timeLeft = Math.round(ROUND_TIME * 1000 + startTime - Date.now()) / 1000;
 
         Rooms.update(roomId, {
           $inc: { acceptedUsers: 1 },
-          $set: { startTime: Date.now() + Math.min(30, timeLeft) * 1000 - ROUND_TIME * 1000 }
+          $set: { startTime: Date.now() + Math.min(AFTER_ACCEPTED_TIME, timeLeft) * 1000 - ROUND_TIME * 1000 }
         });
 
         var room = Rooms.findOne(roomId);
@@ -312,28 +314,28 @@ Meteor.methods({
 
         nextTime = Meteor.setTimeout(function() {
           Meteor.call('prepRound', roomId);
-        }, Math.min(30, timeLeft) * 1000);
+        }, Math.min(AFTER_ACCEPTED_TIME, timeLeft) * 1000);
 
-        if (timeLeft >= 30) {
+        if (timeLeft >= AFTER_ACCEPTED_TIME) {
           message = {
-            text: 'A User has got an accepted problem, so 30 seconds left!',
+            text: 'A User has got an accepted problem, so ' + AFTER_ACCEPTED_TIME + ' seconds left!',
             user: 'System'
           };
 
           RoomStream.emit('message', roomId, message);
-          RoomStream.emit('changeTime', roomId, 30);
+          RoomStream.emit('changeTime', roomId, AFTER_ACCEPTED_TIME);
         }
 
         return;
       } else if (response === 'Wrong Answer') {
         message = {
-          text: 'User ' + user.username  + ' submited the problem for 0 points. Wrong Answer!',
+          text: 'User ' + user.username + ' submited the problem for 0 points. Wrong Answer!',
           user: 'System',
           roomId: roomId
         };
       } else {
         message = {
-          text: 'User ' + user.username  + ' submited the problem for 0 points. Runtime Error! ' + response,
+          text: 'User ' + user.username + ' submited the problem for 0 points. Runtime Error! ' + response,
           user: 'System'
         };
       }
