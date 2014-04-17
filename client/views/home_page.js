@@ -24,7 +24,7 @@ function sign() {
   });
 }
 
-Template.renderSignup.events({
+Template.homePage.events({
   'click .sign-up': function(event) {
     event.preventDefault();
     sign();

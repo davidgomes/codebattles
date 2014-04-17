@@ -3,6 +3,8 @@
     "streams": {},
     "user-status": {},
     "bootstrap-3": {},
-    "GAnalytics": {}
+    "GAnalytics": {},
+    "iron-router": {},
+    "spin": {}
   }
 }

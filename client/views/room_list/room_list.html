@@ -1,0 +1,25 @@
+<template name="roomList">
+  <h3>Game Rooms</h3>
+  
+  {{> roomCreate}}
+
+  {{#if roomCount}}
+    <table class="table table-striped" id="room-table">
+      <thead>
+        <tr>
+          <th class="room-name">Room Name</th>
+          <th class="host">Host</th>
+          <th class="players">Players</th>
+          <th>Difficulty</th>
+          <th class="join"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{#each rooms}}
+          {{> roomItem}}
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+</template>

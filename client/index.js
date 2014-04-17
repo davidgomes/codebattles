@@ -1,4 +1,4 @@
-Template.main.loggedIn = function() {
+Template.index.loggedIn = function() {
   return !! Meteor.user();
 };
 

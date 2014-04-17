@@ -1,21 +1,13 @@
-<head>
-  <title>CodeBattles</title>
-</head>
-
-<body>
-  {{> header}}
-
-  {{> main}}
-</body>
-
-<template name="main">
+<template name="index">
   {{#if loggedIn}}
-    <div class="container">
-      <div id="game">
-        {{> mainRoom}}
-      </div>
+  <div class="container">
+    <div id="game">
+      {{> roomList}}
     </div>
+  </div>
   {{else}}
-    {{> renderSignup}}
+  <div id="cover-page">
+    {{> homePage}}
+  </div>
   {{/if}}
 </template>
