@@ -1,5 +1,6 @@
 Meteor.publish('rooms', function() {
-  return Rooms.find({}, { fields: { title: true, users: true, hostName: true, difficulty: true, status: true } });
+  return Rooms.find({}, { fields: { title: true, users: true, hostName: true,
+                                    difficulty: true, status: true } });
 });
 
 Meteor.publish('usersLSub', function(){
