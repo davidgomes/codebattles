@@ -18,7 +18,7 @@ Meteor.methods({
     }
 
     if (!user) {
-      throw new Meteor.Error(401, "You need to be logged in to send messages");
+      throw new Meteor.Error(401, 'You need to be logged in to send messages');
     }
 
     if (messageText.length <= 0) {
@@ -26,7 +26,7 @@ Meteor.methods({
     }
 
     if (messageText.length > MESSAGE_MAX_CHARS) {
-      throw new Meteor.Error(422, "Messages should have a maximum of " + MESSAGE_MAX_CHARS +  " characters");
+      throw new Meteor.Error(422, 'Messages should have a maximum of ' + MESSAGE_MAX_CHARS +  ' characters');
     }
 
     var message = {

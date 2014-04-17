@@ -1,9 +1,9 @@
 Template.roomList.helpers({
   roomCount: function() {
-    return !! Rooms.find({ status: 0 }).count();
+    return !! Rooms.find({ status: RoomStatuses.STOPPED }).count();
   },
 
   rooms: function() {
-    return Rooms.find({ status: 0 });
+    return Rooms.find({ status: RoomStatuses.STOPPED });
   }
 });

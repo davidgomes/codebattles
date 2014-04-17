@@ -1,8 +1,8 @@
-var _title = "";
+var _title = '';
 var _titleDeps = new Deps.Dependency;
-var _problem = "";
+var _problem = '';
 var _problemDeps = new Deps.Dependency;
-var language = "python2";
+var language = 'python2';
 var updateTitleTimer;
 var roomTitle;
 var roundInfo;
@@ -31,8 +31,7 @@ var setTitle = function(w) {
   }
 };
 
-getRoom = function() {
-  console.log("get: " + Meteor.user()._id + " " + Meteor.user().roomId);
+var getRoom = function() {
   if (Meteor.user()) {
     return Meteor.user().roomId;
   } else {
@@ -56,7 +55,7 @@ Meteor.autosubscribe(function() {
   chatCollection.find().observe( {
     added: function(item) {
       setTimeout(function() {
-        //$('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
+        $('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
       }, 10);
     }
   });
@@ -72,18 +71,18 @@ function reloadEditor() {
     theme: 'mbo'
   });
 
-  editor.setSize($("#editor").parent().width() - 100,
-                 $(".chat-wrapper").height() + 13);
+  editor.setSize($('#editor').parent().width(),
+                 $('.chat-wrapper').height());
 }
 
 var preRoundTitle = function () {
   var tmptitle = roomTitle;
 
-  tmptitle += " | Round " + roundInfo.number.toString();
+  tmptitle += ' | Round ' + roundInfo.number.toString();
   var timeLeft = Math.max(0, Math.round((roundInfo.startTime - Date.now()) / 1000));
 
-  tmptitle += " | " + (timeLeft).toString();
-  tmptitle += " to start";
+  tmptitle += ' | ' + (timeLeft).toString();
+  tmptitle += ' to start';
 
   setTitle(tmptitle);
   updateTitleTimer = Meteor.setTimeout(preRoundTitle, 1000);
@@ -92,11 +91,11 @@ var preRoundTitle = function () {
 var roundTitle = function () {
   var tmptitle = roomTitle;
 
-  tmptitle += " | Round " + roundInfo.number.toString();
+  tmptitle += ' | Round ' + roundInfo.number.toString();
   var timeLeft = Math.max(0, Math.round((roundInfo.startTime - Date.now()) / 1000));
 
-  tmptitle += " | " + (timeLeft).toString();
-  tmptitle += " left";
+  tmptitle += ' | ' + (timeLeft).toString();
+  tmptitle += ' left';
 
   setTitle(tmptitle);
   updateTitleTimer = Meteor.setTimeout(roundTitle, 1000);
@@ -105,31 +104,30 @@ var roundTitle = function () {
 
 // Event Listener
 
-RoomStream.on("prestart", function(roomId, roundNumber) {
+RoomStream.on('prestart', function(roomId, roundNumber, betweenRoundTime) {
   Meteor.clearTimeout(updateTitleTimer);
-  roundInfo = {number: roundNumber, startTime: Date.now() + 10 * 1000};
+  roundInfo = {number: roundNumber, startTime: Date.now() + betweenRoundTime * 1000};
   preRoundTitle();
-  setProblem("");
+  setProblem('');
 }); // Pre Round - Time left to start round
 
-
-RoomStream.on("start", function(roomId, roundTime, statement) {
+RoomStream.on('start', function(roomId, roundTime, statement) {
   Meteor.clearTimeout(updateTitleTimer);
   roundInfo.startTime = Date.now() + roundTime * 1000;
   roundTitle();
   setProblem(statement);
 }); // Round Start
 
-RoomStream.on("changeTime", function(roomId, roundTime) {
+RoomStream.on('changeTime', function(roomId, roundTime) {
   Meteor.clearTimeout(updateTitleTimer);
   roundInfo.startTime = Math.min(roundInfo.startTime, Date.now() + roundTime * 1000);
   roundTitle();
 }); // Change time left, should be because someone got an AC
 
-RoomStream.on("over", function(roomId) {
+RoomStream.on('over', function(roomId) {
   Meteor.clearTimeout(updateTitleTimer);
-  setTitle(roomTitle + " | Game Over");
-  setProblem("");
+  setTitle(roomTitle + ' | Game Over');
+  setProblem('');
 }); // Round Over
 
 
@@ -138,11 +136,9 @@ RoomStream.on("over", function(roomId) {
 Template.renderRoom.helpers({
   currentRoom: function() {
     var room = Rooms.findOne(getRoom());
-    console.log("searching..." + getRoom() + " " + Meteor.user()._id + " " + Meteor.user().roomId);
-    console.log(Meteor.user());
 
     if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
-      alert("The host closed the room");
+      alert('The host closed the room');
 
       Meteor.call('exitRemoved', function(error) {
         if (error) {
@@ -176,6 +172,7 @@ Template.renderRoom.helpers({
       if (u1.score !== u2.score) {
         return u1.score < u2.score;
       }
+
       return u1.ranking < u2.ranking;
     });
 
@@ -190,14 +187,14 @@ Template.renderRoom.helpers({
   roundRunning: function() {
     var room = Rooms.findOne(getRoom());
 
-    return room.status === 1;
+    return room.status === RoomStatuses.RUNNING;
   },
 
   admin: function() {
     var user = Meteor.user();
     var room = Rooms.findOne(getRoom());
 
-    return room.status === 0 && room.hostName === user.username;
+    return room.status === RoomStatuses.STOPPED && room.hostName === user.username;
   },
 
   roomTitle: function() {
@@ -209,7 +206,7 @@ Template.renderRoom.helpers({
   },
 
   problemFull: function() {
-    return problem() !== "";
+    return problem() !== '';
   }
 });
 
@@ -220,7 +217,7 @@ Template.renderRoom.events({
   'click .exit-button': function(event) {
     event.preventDefault();
 
-    if (confirm("Exit Room?")) {
+    if (confirm('Exit Room?')) {
       Meteor.clearTimeout(updateTitleTimer);
       Meteor.call('exit', this.title, function(error) {
         if (error) {
@@ -237,15 +234,15 @@ Template.renderRoom.events({
       if (error) {
         throwError(error.reason);
       } else {
-        $(event.target).find('[name=message]').val("");
+        $(event.target).find('[name=message]').val('');
       }
     });
   },
 
   'click .submit-button': function(event) {
     event.preventDefault();
-    Meteor.call('submit',editor.getValue(),language,Meteor.userId(), getRoom(), function(error) {
-    });
+
+    Meteor.call('submit', editor.getValue(), language, Meteor.userId(), getRoom(), function(error) { });
   },
 
   'click .start-button': function(event) {
@@ -278,7 +275,7 @@ Template.renderRoom.rendered = function() {
   var room = Rooms.findOne(getRoom());
   roomTitle = room.title;
   setTitle(roomTitle);
-  setProblem("");
+  setProblem('');
 
   if (typeof editor === 'undefined') {
     reloadEditor();

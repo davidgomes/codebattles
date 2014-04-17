@@ -1,8 +1,8 @@
 function sign() {  
-  var password = $("#password").val();
-  var uname = $("#username").val();
+  var password = $('#password').val();
+  var username = $('#username').val();
 
-  Meteor.loginWithPassword(uname, password, function(error) {
+  Meteor.loginWithPassword(username, password, function(error) {
     if (error) {
       throwError(error.reason);
     } else {
