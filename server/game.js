@@ -75,8 +75,11 @@ Meteor.methods({
     }
 
     Rooms.update(room._id, {
-      $inc: { status: 1 },
       $set: { startTime: Date.now() + 10 * 1000 }
+    });
+
+    Rooms.update(room._id, {
+      $inc: { status: 1 }
     });
 
     Rooms.update(room._id, {
@@ -149,7 +152,7 @@ Meteor.methods({
     if (this.isSimulation) {
       return;
     }
-    
+
     var room = Rooms.findOne(roomId);
 
     if (!room) {

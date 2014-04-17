@@ -32,6 +32,7 @@ var setTitle = function(w) {
 };
 
 getRoom = function() {
+  console.log("get: " + Meteor.user()._id + " " + Meteor.user().roomId);
   if (Meteor.user()) {
     return Meteor.user().roomId;
   } else {
@@ -55,7 +56,7 @@ Meteor.autosubscribe(function() {
   chatCollection.find().observe( {
     added: function(item) {
       setTimeout(function() {
-        $('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
+        //$('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
       }, 10);
     }
   });
@@ -137,6 +138,8 @@ RoomStream.on("over", function(roomId) {
 Template.renderRoom.helpers({
   currentRoom: function() {
     var room = Rooms.findOne(getRoom());
+    console.log("searching..." + getRoom() + " " + Meteor.user()._id + " " + Meteor.user().roomId);
+    console.log(Meteor.user());
 
     if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
       alert("The host closed the room");
@@ -152,7 +155,6 @@ Template.renderRoom.helpers({
   },
 
   userRoom: function() {
-    console.log("WS");
     return getRoom();
   },
 

@@ -6,6 +6,9 @@ Router.configure({
 Router.map(function() {
   this.route('index', {
     path: '/',
+    waitOn: function () {
+      return [Meteor.subscribe('rooms'), Meteor.subscribe('usersLSub'), Meteor.subscribe('ownUser')];
+    },
     action: function () {
       if (this.ready())
         this.render();
@@ -16,10 +19,7 @@ Router.map(function() {
 
   this.route('room', {
     waitOn: function () {
-      return Meteor.subscribe('ownRoom');
-    },
-    data: function () {
-      return Rooms.findOne(Meteor.user().roomId);
+      return [Meteor.subscribe('ownRoom'), Meteor.subscribe('ownUser'), Meteor.subscribe('usersLSub')];
     },
     action: function () {
       if (this.ready())
