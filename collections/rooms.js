@@ -14,6 +14,10 @@ Rooms.deny({
 
 Meteor.methods({
   room: function(roomTitle, roomDifficulty) {
+    if (this.isSimulation) {
+      return "";
+    }
+    
     var user = Meteor.user();
     var roomCopy = Rooms.findOne({ title: roomTitle });
 
