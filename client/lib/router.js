@@ -14,6 +14,11 @@ Router.map(function() {
         this.render();
       else
         this.render('loading');
+    },
+    before: function () {
+      if (Meteor.user() && !Meteor.user().roomId == "") {
+        Router.go('room');
+      }
     }
   });
 
@@ -37,7 +42,7 @@ Router.map(function() {
   this.route('user', {
     path: 'user/:username',
     waitOn: function () {
-      return Meteor.subscribe('user', this.params.username);
+      return [Meteor.subscribe('ownUser'), Meteor.subscribe('user', this.params.username)];
     },
     data: function () {
       return { showUser: Meteor.users.findOne({ username: this.params.username }) };

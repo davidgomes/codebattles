@@ -25,6 +25,7 @@ Template.header.events({
   'click .logout': function(event) {
     event.preventDefault();
     Meteor.logout();
+    Router.go('index');
   },
 
   'click .sign-in': function(event) {

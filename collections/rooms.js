@@ -85,6 +85,10 @@ Meteor.methods({
       throw new Meteor.Error(303, 'Game Started');
     }
 
+    if (user.roomId || _.contains(room.users, user.username) || room.hostName == user.username) {
+      throw new Meteor.Error(304, 'Already in room');
+    }
+
     Meteor.users.update(user._id, {
       $set: { score: 0 }
     });
