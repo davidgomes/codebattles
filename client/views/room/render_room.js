@@ -164,21 +164,25 @@ RoomStream.on('over', function(roomId) {
 
 // Helpers
 
+var checkRoom = function() {
+  var room = Rooms.findOne(getRoom());
+
+  if (getRoom() && !room) {
+    alert('The host closed the room');
+
+    Meteor.call('exitRemoved', function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+    });
+  }
+
+  return room;
+};
+
 Template.renderRoom.helpers({
   currentRoom: function() {
-    var room = Rooms.findOne(getRoom());
-
-    if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
-      alert('The host closed the room');
-
-      Meteor.call('exitRemoved', function(error) {
-        if (error) {
-          throwError(error.reason);
-        }
-      });
-    }
-
-    return room;
+    return checkRoom();
   },
 
   userRoom: function() {
@@ -190,7 +194,7 @@ Template.renderRoom.helpers({
   },
 
   roomUsers: function() {
-    var room = Rooms.findOne(getRoom());
+    var room = checkRoom();
     var usernames = room.users;
     var users = [];
     usernames.push(room.hostName);
@@ -303,7 +307,11 @@ Template.renderRoom.events({
 Template.renderRoom.rendered = function() {
   editor = undefined;
   Meteor.clearTimeout(updateTitleTimer);
-  var room = Rooms.findOne(getRoom());
+  var room = checkRoom();
+  if (!room) {
+    return;
+  }
+
   roomTitle = room.title;
   setTitle(roomTitle);
   setProblem('');

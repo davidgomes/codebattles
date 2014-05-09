@@ -30,6 +30,10 @@ Router.map(function() {
     },
     action: function () {
       if (this.ready()) {
+        if (!Meteor.user() || Meteor.user().roomId == "") {
+          Router.go('index');
+        }
+        
         if (!synced) {
           sync();
           synced = true;
@@ -39,11 +43,6 @@ Router.map(function() {
       else {
         synced = false;
         this.render('loading');
-      }
-    },
-    before: function () {
-      if (!Meteor.user() || Meteor.user().roomId == "") {
-        Router.go('index');
       }
     }
   });
