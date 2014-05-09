@@ -1,3 +1,5 @@
+var synced = false;
+
 Router.configure({
   layoutTemplate: 'layout',
   notFoundTemplate: 'notFound'
@@ -27,10 +29,17 @@ Router.map(function() {
       return [Meteor.subscribe('ownRoom'), Meteor.subscribe('ownUser'), Meteor.subscribe('usersLSub')];
     },
     action: function () {
-      if (this.ready())
+      if (this.ready()) {
+        if (!synced) {
+          sync();
+          synced = true;
+        }
         this.render();
-      else
+      }
+      else {
+        synced = false;
         this.render('loading');
+      }
     },
     before: function () {
       if (!Meteor.user() || Meteor.user().roomId == "") {

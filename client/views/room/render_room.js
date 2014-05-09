@@ -102,6 +102,37 @@ var roundTitle = function () {
 };
 
 
+sync = function() {
+  Meteor.call("getRoundInfo", function(error, wrappedInfo) {
+    if (error) {
+      throwError(error.reason);
+      return;
+    }
+
+    console.log(wrappedInfo);
+    if (!wrappedInfo) {
+      return;
+    }
+
+    if (wrappedInfo.status === RoomStatuses.RUNNING) {
+      Meteor.clearTimeout(updateTitleTimer);
+      roundInfo = {number: wrappedInfo.round};
+
+      if (wrappedInfo.preRound) {
+        roundInfo.startTime = Date.now() + wrappedInfo.roundTime * 1000;
+        preRoundTitle();
+        setProblem('');
+      }
+      else {
+        roundInfo.startTime = Date.now() + wrappedInfo.roundTime * 1000;
+        roundTitle();
+        setProblem(wrappedInfo.statement);
+      }
+    }
+  });
+};
+
+
 // Event Listener
 
 RoomStream.on('prestart', function(roomId, roundNumber, betweenRoundTime) {

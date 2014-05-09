@@ -230,7 +230,8 @@ Meteor.methods({
       Rooms.update(roomId, {
         $inc: { round: 1 },
         $set: { startTime: Date.now() + BETWEEN_ROUND_TIME * 1000,
-                countTime: Date.now() + BETWEEN_ROUND_TIME * 1000 }
+                countTime: Date.now() + BETWEEN_ROUND_TIME * 1000,
+                probNum: -1 }
       });
 
       Rooms.update(roomId, {
@@ -345,5 +346,40 @@ Meteor.methods({
 
       RoomStream.emit('message', roomId, message);
     });
+  },
+
+  getRoundInfo: function() {
+    if (this.isSimulation) {
+      return null;
+    }
+
+    var user = Meteor.user();
+
+    if (!user) {
+      throw new Meteor.Error(303, 'You need to be logged in.');
+    }
+    
+    var room = Rooms.findOne(user.roomId);
+
+    if (!room) {
+      throw new Meteor.Error(303, 'You need to be in a room.');
+    }
+
+    var wrappedInfo = { status: room.status };
+    if (room.status === RoomStatuses.RUNNING) {
+      wrappedInfo.round = room.round;
+
+      if (room.probNum !== -1) {
+        wrappedInfo.statement = problems[room.probNum - 1].statement;
+        wrappedInfo.roundTime = Math.round(ROUND_TIME * 1000 + room.startTime - Date.now()) / 1000;
+        wrappedInfo.preRound = false;
+      }
+      else {
+        wrappedInfo.roundTime = Math.round(BETWEEN_ROUND_TIME * 1000 + room.startTime - Date.now()) / 1000;
+        wrappedInfo.preRound = true;
+      }
+    }
+
+    return wrappedInfo;
   }
 });
