@@ -16,28 +16,46 @@ Router.map(function() {
         this.render();
       else
         this.render('loading');
-    },
-    before: function () {
-      if (Meteor.user() && !Meteor.user().roomId == "") {
-        Router.go('room');
-      }
     }
   });
 
   this.route('room', {
+    path: 'room/:_id',
     waitOn: function () {
-      return [Meteor.subscribe('ownRoom'), Meteor.subscribe('ownUser'), Meteor.subscribe('usersLSub')];
+      return [Meteor.subscribe('ownUser'), Meteor.subscribe('room', this.params._id), Meteor.subscribe('usersLSub')];
     },
     action: function () {
       if (this.ready()) {
-        if (!Meteor.user() || Meteor.user().roomId == "") {
-          Router.go('index');
-        }
-        
         if (!synced) {
+          if (!Meteor.user()) {
+            Router.go('index');
+          }
+
+          var user = Meteor.user();
+          var room = Rooms.findOne(this.params._id);
+
+          if (!room) {
+            alert("Room not found");
+            synced = true;
+            Router.go('index');
+            this.stop();
+            return;
+          }
+
+          if (user.roomId) {
+            if (user.roomId !== this.params._id || (!_.contains(room.users, user.username) && room.hostName !== user.username)) {
+              Meteor.call('exitFromServer', user.roomId, user._id);
+            }
+
+            joinRoom(room._id);
+          } else {
+            Meteor.call('join', room.title);
+          }
+
           sync();
           synced = true;
         }
+
         this.render();
       }
       else {

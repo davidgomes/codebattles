@@ -9,8 +9,7 @@ Template.roomCreate.events({
       if (error) {
         throwError(error.reason);
       } else {
-        Router.go('room');
-        joinRoom(roomId);
+        Router.go('/room/' + roomId);
       }
     });
   }

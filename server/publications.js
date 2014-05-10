@@ -1,8 +1,3 @@
-Meteor.publish('rooms', function() {
-  return Rooms.find({ status: RoomStatuses.STOPPED }, { fields: { title: true, users: true, hostName: true,
-                                                                  difficulty: true, status: true } });
-});
-
 Meteor.publish('usersLSub', function() {
   return Meteor.users.find({ "status.online": true },
                            { fields: { username: true, score: true, ranking: true } });
@@ -16,6 +11,11 @@ Meteor.publish('user', function(_username){
   return Meteor.users.find({ username: _username }, { fields: { ranking: true } });
 });
 
+Meteor.publish('rooms', function() {
+  return Rooms.find({ status: RoomStatuses.STOPPED }, { fields: { title: true, users: true, hostName: true,
+                                                                  difficulty: true, status: true } });
+});
+
 Meteor.publish('ownRoom', function(){
   var user = Meteor.users.findOne(this.userId);
   if (user) {
@@ -24,6 +24,9 @@ Meteor.publish('ownRoom', function(){
   return 0;
 });
 
+Meteor.publish('room', function(_id){
+  return Rooms.find(_id, { fields: { title: true, users: true, hostName: true, difficulty: true, status: true } });
+});
 
 Meteor.users.deny({
   update: function() {

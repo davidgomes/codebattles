@@ -173,6 +173,8 @@ var checkRoom = function() {
     Meteor.call('exitRemoved', function(error) {
       if (error) {
         throwError(error.reason);
+      } else {
+        Router.go('index');
       }
     });
   }
@@ -257,6 +259,8 @@ Template.renderRoom.events({
       Meteor.call('exit', this.title, function(error) {
         if (error) {
           throwError(error.reason);
+        } else {
+          Router.go('index');
         }
       });
     }
