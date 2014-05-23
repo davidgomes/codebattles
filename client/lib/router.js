@@ -8,23 +8,32 @@ Router.configure({
 Router.map(function() {
   this.route('index', {
     path: '/',
+    
     waitOn: function () {
-      return [Meteor.subscribe('rooms'), Meteor.subscribe('usersLSub'), Meteor.subscribe('ownUser')];
+      return [ Meteor.subscribe('rooms'),
+               Meteor.subscribe('usersLSub'),
+               Meteor.subscribe('ownUser')];
     },
-    action: function () {
-      if (this.ready())
+    
+    action: function() {
+      if (this.ready()) {
         this.render();
-      else
+      } else {
         this.render('loading');
+      }
     }
   });
 
   this.route('room', {
     path: 'room/:_id',
-    waitOn: function () {
-      return [Meteor.subscribe('ownUser'), Meteor.subscribe('room', this.params._id), Meteor.subscribe('usersLSub')];
+    
+    waitOn: function() {
+      return [ Meteor.subscribe('ownUser'),
+               Meteor.subscribe('room', this.params._id),
+               Meteor.subscribe('usersLSub')];
     },
-    action: function () {
+    
+    action: function() {
       if (this.ready()) {
         if (!synced) {
           if (!Meteor.user()) {
@@ -57,8 +66,7 @@ Router.map(function() {
         }
 
         this.render();
-      }
-      else {
+      } else {
         synced = false;
         this.render('loading');
       }
@@ -67,17 +75,22 @@ Router.map(function() {
 
   this.route('user', {
     path: 'user/:username',
-    waitOn: function () {
-      return [Meteor.subscribe('ownUser'), Meteor.subscribe('user', this.params.username)];
+    
+    waitOn: function() {
+      return [ Meteor.subscribe('ownUser'),
+               Meteor.subscribe('user', this.params.username)];
     },
-    data: function () {
+    
+    data: function() {
       return { showUser: Meteor.users.findOne({ username: this.params.username }) };
     },
-    action: function () {
-      if (this.ready())
+    
+    action: function() {
+      if (this.ready()) {
         this.render();
-      else
+      } else {
         this.render('loading');
+      }
     }
   });
 });
