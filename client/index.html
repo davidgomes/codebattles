@@ -1,13 +1,11 @@
 <template name="index">
   {{#if currentUser}}
-  <div class="container">
-    <div id="game">
-      {{> roomList}}
+    <div class="container">
+      <div id="game">
+        {{> roomList}}
+      </div>
     </div>
-  </div>
   {{else}}
-  <div id="cover-page">
     {{> homePage}}
-  </div>
   {{/if}}
 </template>
