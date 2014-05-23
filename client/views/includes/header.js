@@ -7,6 +7,7 @@ function sign() {
       throwError(error.reason);
     } else {
       $('#signInModal').modal('hide');
+      $('#signUpModal').modal('hide');
     }
   });
 }
