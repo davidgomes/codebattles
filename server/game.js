@@ -45,11 +45,11 @@ RoomStream.permissions.write(function(eventName, roomId, arg1) {
 
 /*
  Game Methods:
-  - startGame    : Start a new Game
-  - startRound   : Start current round
-  - prepRound    : Finish previous round and setup BETWEEN_ROUND_TIME seconds to next or game over
-  - submit       : User code submit
-*/
+ - startGame    : Start a new Game
+ - startRound   : Start current round
+ - prepRound    : Finish previous round and setup BETWEEN_ROUND_TIME seconds to next or game over
+ - submit       : User code submit
+ */
 
 var nextTime; // Timeout object for next event
 
@@ -358,7 +358,7 @@ Meteor.methods({
     if (!user) {
       throw new Meteor.Error(303, 'You need to be logged in.');
     }
-    
+
     var room = Rooms.findOne(user.roomId);
 
     if (!room) {
@@ -373,8 +373,7 @@ Meteor.methods({
         wrappedInfo.statement = problems[room.probNum - 1].statement;
         wrappedInfo.roundTime = Math.round(ROUND_TIME * 1000 + room.startTime - Date.now()) / 1000;
         wrappedInfo.preRound = false;
-      }
-      else {
+      } else {
         wrappedInfo.roundTime = Math.round(BETWEEN_ROUND_TIME * 1000 + room.startTime - Date.now()) / 1000;
         wrappedInfo.preRound = true;
       }
