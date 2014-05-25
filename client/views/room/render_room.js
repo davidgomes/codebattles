@@ -39,20 +39,20 @@ var getRoom = function() {
   }
 };
 
-chatCollection = new Meteor.Collection(null);
+ChatCollection = new Meteor.Collection(null);
 RoomStream = new Meteor.Stream('room_streams');
 
 RoomStream.on('message', function(roomId, message) {
   var chatdiv = document.getElementById('chat-div');
 
-  chatCollection.insert({
+  ChatCollection.insert({
     user: message.user,
     message: message.text
   });
 });
 
 Meteor.autosubscribe(function() {
-  chatCollection.find().observe( {
+  ChatCollection.find().observe( {
     added: function(item) {
       setTimeout(function() {
         $('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
@@ -191,7 +191,7 @@ Template.renderRoom.helpers({
   },
 
   messageList: function() {
-    return chatCollection.find();
+    return ChatCollection.find();
   },
 
   roomUsers: function() {
