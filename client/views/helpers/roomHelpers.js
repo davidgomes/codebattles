@@ -5,8 +5,8 @@ joinRoom = function(roomId) {
   if (room && user) {
     ChatCollection.remove({ });
     ChatCollection.insert({
-      user: "System",
-      message: "User " + user.username + " has entered the room."
+      user: 'System',
+      message: 'User ' + user.username + ' has entered the room.'
     });
   }
 };

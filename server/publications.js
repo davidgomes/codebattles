@@ -1,5 +1,5 @@
 Meteor.publish('usersLSub', function() {
-  return Meteor.users.find({ "status.online": true },
+  return Meteor.users.find({ 'status.online': true },
                            { fields: { username: true, score: true, ranking: true } });
 });
 

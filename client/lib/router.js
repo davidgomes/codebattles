@@ -8,13 +8,13 @@ Router.configure({
 Router.map(function() {
   this.route('index', {
     path: '/',
-    
+
     waitOn: function () {
       return [ Meteor.subscribe('rooms'),
                Meteor.subscribe('usersLSub'),
                Meteor.subscribe('ownUser')];
     },
-    
+
     action: function() {
       if (this.ready()) {
         this.render();
@@ -26,13 +26,13 @@ Router.map(function() {
 
   this.route('room', {
     path: 'room/:_id',
-    
+
     waitOn: function() {
       return [ Meteor.subscribe('ownUser'),
                Meteor.subscribe('room', this.params._id),
                Meteor.subscribe('usersLSub')];
     },
-    
+
     action: function() {
       if (this.ready()) {
         if (!synced) {
@@ -75,22 +75,22 @@ Router.map(function() {
 
   this.route('user', {
     path: 'user/:username',
-    
+
     waitOn: function() {
       return [ Meteor.subscribe('ownUser'),
                Meteor.subscribe('user', this.params.username)];
     },
-    
+
     data: function() {
       return { showUser: Meteor.users.findOne({ username: this.params.username }) };
     },
-    
+
     action: function() {
       if (this.ready()) {
         var user = Meteor.users.findOne({ username: this.params.username });
 
         if (!user) {
-          this.render("userNotFound");
+          this.render('userNotFound');
           return;
         }
 
