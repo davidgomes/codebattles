@@ -87,6 +87,13 @@ Router.map(function() {
     
     action: function() {
       if (this.ready()) {
+        var user = Meteor.users.findOne({ username: this.params.username });
+
+        if (!user) {
+          this.render("userNotFound");
+          return;
+        }
+
         this.render();
       } else {
         this.render('loading');
