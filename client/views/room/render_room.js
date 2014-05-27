@@ -101,7 +101,6 @@ var roundTitle = function () {
   updateTitleTimer = Meteor.setTimeout(roundTitle, 1000);
 };
 
-
 sync = function() {
   Meteor.call('getRoundInfo', function(error, wrappedInfo) {
     if (error) {
@@ -109,14 +108,13 @@ sync = function() {
       return;
     }
 
-    console.log(wrappedInfo);
     if (!wrappedInfo) {
       return;
     }
 
     if (wrappedInfo.status === RoomStatuses.RUNNING) {
       Meteor.clearTimeout(updateTitleTimer);
-      roundInfo = {number: wrappedInfo.round};
+      roundInfo = { number: wrappedInfo.round };
 
       if (wrappedInfo.preRound) {
         roundInfo.startTime = Date.now() + wrappedInfo.roundTime * 1000;
