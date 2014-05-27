@@ -52,7 +52,7 @@ RoomStream.on('message', function(roomId, message) {
 });
 
 Meteor.autosubscribe(function() {
-  ChatCollection.find().observe( {
+  ChatCollection.find().observe({
     added: function(item) {
       setTimeout(function() {
         $('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
