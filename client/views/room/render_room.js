@@ -31,6 +31,37 @@ var setTitle = function(w) {
   }
 };
 
+var getRoom = function() {
+  if (Meteor.user()) {
+    return Meteor.user().roomId;
+  } else {
+    return 0;
+  }
+};
+
+ChatCollection = new Meteor.Collection(null);
+RoomStream = new Meteor.Stream('room_streams');
+
+RoomStream.on('message', function(roomId, message) {
+  var chatdiv = document.getElementById('chat-div');
+
+  ChatCollection.insert({
+    user: message.user,
+    message: message.text
+  });
+});
+
+Meteor.autosubscribe(function() {
+  ChatCollection.find().observe({
+    added: function(item) {
+      setTimeout(function() {
+        $('#chat-div').scrollTop($('#chat-div')[0].scrollHeight);
+      }, 10);
+    }
+  });
+});
+
+
 function reloadEditor() {
   editor = new CodeMirror(document.getElementById('actual-editor'), {
     lineNumbers: true,
@@ -70,6 +101,34 @@ var roundTitle = function () {
   updateTitleTimer = Meteor.setTimeout(roundTitle, 1000);
 };
 
+sync = function() {
+  Meteor.call('getRoundInfo', function(error, wrappedInfo) {
+    if (error) {
+      throwError(error.reason);
+      return;
+    }
+
+    if (!wrappedInfo) {
+      return;
+    }
+
+    if (wrappedInfo.status === RoomStatuses.RUNNING) {
+      Meteor.clearTimeout(updateTitleTimer);
+      roundInfo = { number: wrappedInfo.round };
+
+      if (wrappedInfo.preRound) {
+        roundInfo.startTime = Date.now() + wrappedInfo.roundTime * 1000;
+        preRoundTitle();
+        setProblem('');
+      } else {
+        roundInfo.startTime = Date.now() + wrappedInfo.roundTime * 1000;
+        roundTitle();
+        setProblem(wrappedInfo.statement);
+      }
+    }
+  });
+};
+
 
 // Event Listener
 
@@ -102,21 +161,27 @@ RoomStream.on('over', function(roomId) {
 
 // Helpers
 
+var checkRoom = function() {
+  var room = Rooms.findOne(getRoom());
+
+  if (getRoom() && !room) {
+    alert('The host closed the room');
+
+    Meteor.call('exitRemoved', function(error) {
+      if (error) {
+        throwError(error.reason);
+      } else {
+        Router.go('index');
+      }
+    });
+  }
+
+  return room;
+};
+
 Template.renderRoom.helpers({
   currentRoom: function() {
-    var room = Rooms.findOne(getRoom());
-
-    if (getRoom() && !Rooms.findOne({ _id: getRoom() })) {
-      alert('The host closed the room');
-
-      Meteor.call('exitRemoved', function(error) {
-        if (error) {
-          throwError(error.reason);
-        }
-      });
-    }
-
-    return room;
+    return checkRoom();
   },
 
   userRoom: function() {
@@ -124,11 +189,11 @@ Template.renderRoom.helpers({
   },
 
   messageList: function() {
-    return chatCollection.find();
+    return ChatCollection.find();
   },
 
   roomUsers: function() {
-    var room = Rooms.findOne(getRoom());
+    var room = checkRoom();
     var usernames = room.users;
     var users = [];
     usernames.push(room.hostName);
@@ -191,6 +256,8 @@ Template.renderRoom.events({
       Meteor.call('exit', this.title, function(error) {
         if (error) {
           throwError(error.reason);
+        } else {
+          Router.go('index');
         }
       });
     }
@@ -241,7 +308,11 @@ Template.renderRoom.events({
 Template.renderRoom.rendered = function() {
   editor = undefined;
   Meteor.clearTimeout(updateTitleTimer);
-  var room = Rooms.findOne(getRoom());
+  var room = checkRoom();
+  if (!room) {
+    return;
+  }
+
   roomTitle = room.title;
   setTitle(roomTitle);
   setProblem('');

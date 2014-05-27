@@ -1,0 +1,61 @@
+<template name="renderRoom">
+  <div class="container">
+    {{#with currentRoom}}
+      <h3>{{roomTitle}}</h3>
+
+      {{#if problemFull}}
+        <div class="problem-statement">
+          <p>
+            <strong>Problem Statement:</strong>
+            {{statement}}
+          </p>
+        </div>
+      {{/if}}
+
+      <div class="row">
+        <div class="col-sm-3 user-list" id="room-list">
+          {{#each roomUsers}}
+            {{> roomUser}}
+          {{/each}}
+
+          <input type="button" value="Exit Room" class="btn btn-primary exit-button"/>
+        </div>
+
+        <div class="col-sm-6" id="editordiv">
+          <div id="actual-editor">
+          </div>
+
+          <div class="dropdown pull-left">
+            <select id="language-selection" class="form-control">
+              <option value="python2">Python 2</option>
+              <option value="python3">Python 3</option>
+              <option value="ruby">Ruby</option>
+            </select>
+          </div>
+
+          <form class="form-inline pull-right">
+            {{#if admin}}
+              <input type="button" value="Start Round" class="btn btn-danger start-button"/>
+            {{else}}
+              {{#if roundRunning}}
+                <input type="button" value="Submit" class="btn btn-success submit-button"/>
+              {{/if}}
+            {{/if}}
+          </form>
+        </div>
+      
+        <div class="col-sm-3" id="chat">
+          <div class="chat-wrapper" id="chat-div">
+            {{#each messageList}}
+              <p><span class="chat-user">{{user}}:</span> {{message}}</p>
+            {{/each}}
+          </div>
+
+          <form role="form">
+            <input name="message" type="text" value="" class="form-control send-message" placeholder="Send message..." maxlength=140 autocomplete="off" />
+          </form>
+        </div>
+      </div>
+    {{/with}}
+  </div>
+</template>

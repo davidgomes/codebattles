@@ -1,10 +1,10 @@
-<template name="renderSignup">
+<template name="homePage">
   <div id="cbattles">
     <hh1><strong>CodeBattles</strong></hh1>
   </div>
 
   <div id="login-wrapper">
-    <a href="#signUpModal" role="button" class="btn btn-primary" data-toggle="modal">Sign Up!</a>
+    <a data-target="#signUpModal" role="button" class="btn btn-primary" data-toggle="modal">Sign Up!</a>
   </div>
 
   <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="modal-body">
-          <form>
+          <form id="sign-up-form">
             <p>
               <label for="username">Username:</label>
               <input type="text" id="username_field" placeholder="Username..." />
@@ -35,7 +35,7 @@
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-primary sign-up">Sign Up</button>
+          <input type="submit" class="btn btn-primary sign-up" value="Sign Up" form="sign-up-form"/>
         </div>
       </div>
     </div>

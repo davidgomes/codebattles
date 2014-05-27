@@ -14,6 +14,10 @@ Rooms.deny({
 
 Meteor.methods({
   room: function(roomTitle, roomDifficulty) {
+    if (this.isSimulation) {
+      return "";
+    }
+    
     var user = Meteor.user();
     var roomCopy = Rooms.findOne({ title: roomTitle });
 
@@ -79,6 +83,10 @@ Meteor.methods({
 
     if (room.status !== RoomStatuses.STOPPED) {
       throw new Meteor.Error(303, 'Game Started');
+    }
+
+    if (user.roomId || _.contains(room.users, user.username) || room.hostName == user.username) {
+      throw new Meteor.Error(304, 'Already in room');
     }
 
     Meteor.users.update(user._id, {

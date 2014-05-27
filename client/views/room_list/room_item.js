@@ -18,7 +18,7 @@ Template.roomItem.events({
       if (error) {
         throwError(error.reason);
       } else {
-        joinRoom(roomId);
+        Router.go('/room/' + roomId);
       }
     });
   }

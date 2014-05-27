@@ -24,13 +24,9 @@ function sign() {
   });
 }
 
-Template.renderSignup.events({
-  'click .sign-up': function(event) {
-    event.preventDefault();
-    sign();
-  },
-
+Template.homePage.events({
   'submit #signUpModal form': function(event) {
+    $('.modal-backdrop').remove(); // FIXME Dirty hack to clear the modal backdrop
     event.preventDefault();
     sign();
   }

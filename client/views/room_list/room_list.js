@@ -5,9 +5,5 @@ Template.roomList.helpers({
 
   rooms: function() {
     return Rooms.find({ status: RoomStatuses.STOPPED });
-  },
-
-  isLoggedIn: function() {
-    return !! Meteor.user();
   }
 });
